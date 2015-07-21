@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 21, 2015 at 08:06 AM
+-- Generation Time: Jul 21, 2015 at 09:28 AM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -17,28 +17,23 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `taxiapp`
+-- Database: `appcom_ziftapp`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_location`
+-- Table structure for table `driver_location`
 --
 
-CREATE TABLE IF NOT EXISTS `user_location` (
+CREATE TABLE IF NOT EXISTS `driver_location` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `mobileno` bigint(10) NOT NULL,
-  `latitude` varchar(30) NOT NULL,
-  `longitude` varchar(30) NOT NULL,
-  `area` varchar(30) NOT NULL,
+  `latitude` float(10,6) NOT NULL,
+  `longitude` float(10,6) NOT NULL,
+  `location_area` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
-
---
--- Dumping data for table `user_location`
---
-
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

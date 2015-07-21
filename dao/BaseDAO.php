@@ -5,7 +5,7 @@ class BaseDAO {
     private $db_host = 'localhost'; //hostname
     private $db_user = 'root'; // username
     private $db_password = ''; // password
-    private $db_name = 'taxiapp'; //database name
+    private $db_name = 'appcom_ziftapp'; //database name
     private $con = null;
     
     

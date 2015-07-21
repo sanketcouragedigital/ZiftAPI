@@ -15,7 +15,7 @@ class CurrentLocationDataDAO
     
     //Checks the supplied user is already exists in database or not.
     public function check($contact) {
-        $query = "SELECT mobileno FROM user_location WHERE mobileno = '".$contact->getMobileNo()."' ";
+        $query = "SELECT mobileno FROM driver_location WHERE mobileno = '".$contact->getMobileNo()."' ";
         $result = mysqli_query($this->con, $query);
         if (mysqli_num_rows($result)>0){
             $this->data = $this->update($contact);
@@ -28,7 +28,7 @@ class CurrentLocationDataDAO
     //Saves the supplied user to the database.
     public function save($contact) {
         //include_once ('db_config.php');
-        $sql = "INSERT INTO user_location(mobileno,latitude,longitude,area)VALUES('".$contact->getMobileNo()."', '".$contact->getLatitude()."', '".$contact->getLongitude()."', '".$contact->getArea()."')";
+        $sql = "INSERT INTO driver_location(mobileno,latitude,longitude,location_area)VALUES('".$contact->getMobileNo()."', '".$contact->getLatitude()."', '".$contact->getLongitude()."', '".$contact->getArea()."')";
         
         try {
             $isInserted = mysqli_query($this->con,$sql);
@@ -46,7 +46,7 @@ class CurrentLocationDataDAO
     //Updates the supplied data of the user in the database.
     public function update($contact) {
         //include_once ('db_config.php');
-        $sql = "UPDATE user_location SET latitude='".$contact->getLatitude()."', longitude='".$contact->getLongitude()."', area='".$contact->getArea()."' WHERE mobileno='".$contact->getMobileNo()."' ";
+        $sql = "UPDATE driver_location SET latitude='".$contact->getLatitude()."', longitude='".$contact->getLongitude()."', location_area='".$contact->getArea()."' WHERE mobileno='".$contact->getMobileNo()."' ";
         
         try {
             $isUpdated = mysqli_query($this->con,$sql);
