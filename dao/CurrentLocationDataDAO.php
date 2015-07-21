@@ -1,0 +1,64 @@
+<?php
+
+require_once 'BaseDAO.php';
+class CurrentLocationDataDAO 
+{
+    
+    private $con;
+    private $data;
+    
+    // Attempts to initialize the database connection using the supplied info.
+    public function CurrentLocationDataDAO() {
+        $baseDAO = new BaseDAO();
+        $this->con = $baseDAO->getConnection();
+    }
+    
+    //Checks the supplied user is already exists in database or not.
+    public function check($contact) {
+        $query = "SELECT mobileno FROM user_location WHERE mobileno = '".$contact->getMobileNo()."' ";
+        $result = mysqli_query($this->con, $query);
+        if (mysqli_num_rows($result)>0){
+            $this->data = $this->update($contact);
+        } else {
+            $this->data = $this->save($contact);
+        }
+        return $this->data;
+    }
+    
+    //Saves the supplied user to the database.
+    public function save($contact) {
+        //include_once ('db_config.php');
+        $sql = "INSERT INTO user_location(mobileno,latitude,longitude,area)VALUES('".$contact->getMobileNo()."', '".$contact->getLatitude()."', '".$contact->getLongitude()."', '".$contact->getArea()."')";
+        
+        try {
+            $isInserted = mysqli_query($this->con,$sql);
+            if ($isInserted) {
+                $this->data = "LOCATION_SAVED";
+            } else {
+                $this->data = "ERROR";
+            } 
+        } catch(Exception $e) {
+            echo 'SQL Exception: ' .$e->getMessage();
+        }
+        return $this->data;
+    }
+    
+    //Updates the supplied data of the user in the database.
+    public function update($contact) {
+        //include_once ('db_config.php');
+        $sql = "UPDATE user_location SET latitude='".$contact->getLatitude()."', longitude='".$contact->getLongitude()."', area='".$contact->getArea()."' WHERE mobileno='".$contact->getMobileNo()."' ";
+        
+        try {
+            $isUpdated = mysqli_query($this->con,$sql);
+            if ($isUpdated) {
+                $this->data = "LOCATION_UPDATED";
+            } else {
+                $this->data = "ERROR";
+            } 
+        } catch(Exception $e) {
+            echo 'SQL Exception: ' .$e->getMessage();
+        }
+        return $this->data;
+    }
+}
+?>
