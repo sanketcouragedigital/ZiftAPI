@@ -60,5 +60,22 @@ class CurrentLocationDataDAO
         }
         return $this->data;
     }
+    
+    //Deletes the Driver Location Entry
+    public function delete($deleteEntry) {
+        $query="DELETE FROM driver_location WHERE mobileno = '".$deleteEntry->getMobileNo()."'";
+        
+        try{
+            $delete=mysqli_query($this->con,$query);
+            if($delete){
+                $this->data = array("result" => 1, "message" => "Successfully user deleted!");
+            } else {
+                $this->data = array("result" => 0, "message" => "Error!");
+            }
+        } catch(Exception $e) {
+            echo 'SQL Exception: ' .$e->getMessage();
+        }
+        return $this->data;
+    }
 }
 ?>

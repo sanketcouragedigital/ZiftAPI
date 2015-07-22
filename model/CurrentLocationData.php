@@ -1,5 +1,5 @@
 <?php
-require_once '../dao/currentLocationDataDAO.php';
+require_once '../dao/CurrentLocationDataDAO.php';
 class CurrentLocationData
 {
     private $mobileno;
@@ -50,6 +50,13 @@ class CurrentLocationData
         $currentLocationDataDAO = new CurrentLocationDataDAO();
         $returnSuccessMessage = $currentLocationDataDAO->check($this);
         return $returnSuccessMessage;
+    }
+    
+    public function deleteLocationEntry($mobileno) {
+        $currentLocationDataDAO = new CurrentLocationDataDAO();
+        $this->setMobileNo($mobileno);
+        $returnDeleteMessage = $currentLocationDataDAO->delete($this);
+        return $returnDeleteMessage;
     }
 }          
 ?>

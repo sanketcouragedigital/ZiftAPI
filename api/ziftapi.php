@@ -1,5 +1,5 @@
 <?php
-require_once '../model/currentLocationData.php';
+require_once '../model/CurrentLocationData.php';
 
 function deliver_response($format, $api_response, $isSaveQuery) {
 
@@ -117,6 +117,14 @@ if (isset($_POST['method'])) {
         $location->mapIncomingParams($mobileno, $latitude, $longitude, $area);
         $response['forHireData'] = $location -> locationData();
         deliver_response($_POST['format'], $response, true);
+    }
+    if (strcasecmp($_POST['method'], 'hired') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $delete = new CurrentLocationData();
+        $mobileno = stripslashes($_POST['mobileno']);
+        $response['deleteEntry'] = $delete -> deleteLocationEntry($mobileno);
+        deliver_response($_POST['format'], $response, false);
     }
 }
 ?>
