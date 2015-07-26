@@ -1,46 +1,34 @@
 <?php
 
 require_once 'BaseDAO.php';
-class CurrentLocationDataDAO 
+class UserReviewDataDAO 
 {
     
     private $con;
-    private $msg;
+    private $data;
     
     // Attempts to initialize the database connection using the supplied info.
-    public function CurrentLocationDataDAO() {
+    public function UserReviewDataDAO() {
         $baseDAO = new BaseDAO();
         $this->con = $baseDAO->getConnection();
     }
-    
-    //Checks the supplied user is already exists in database or not.
-    public function check($contact) {
-        $query = "SELECT mobileno FROM driver_location WHERE mobileno = '".$contact->getMobileNo()."' ";
-        $result = mysqli_query($this->con, $query);
-        if (mysqli_num_rows($result)>0){
-            $this->msg = $this->update($contact);
-        } else {
-            $this->msg = $this->save($contact);
-        }
-        return $this->msg;
-    }
-    
+     
     //Saves the supplied user to the database.
-    public function save($contact) {
+    public function save($review) {
         //include_once ('db_config.php');
-        $sql = "INSERT INTO driver_location(mobileno,latitude,longitude,location_area)VALUES('".$contact->getMobileNo()."', '".$contact->getLatitude()."', '".$contact->getLongitude()."', '".$contact->getArea()."')";
+        $sql = "INSERT INTO user_reviews(serviceName,rating,comment)VALUES('".$review->getServiceName()."', '".$review->getRatingNumber()."', '".$review->getComment()."')";
         
         try {
             $isInserted = mysqli_query($this->con,$sql);
             if ($isInserted) {
-                $this->msg = "LOCATION_SAVED";
+                $this->data = "REVIEW_SAVED";
             } else {
-                $this->msg = "ERROR";
+                $this->data = "ERROR";
             } 
         } catch(Exception $e) {
             echo 'SQL Exception: ' .$e->getMessage();
         }
-        return $this->msg;
+        return $this->data;
     }
     
     //Updates the supplied data of the user in the database.
@@ -51,14 +39,14 @@ class CurrentLocationDataDAO
         try {
             $isUpdated = mysqli_query($this->con,$sql);
             if ($isUpdated) {
-                $this->msg = "LOCATION_UPDATED";
+                $this->data = "LOCATION_UPDATED";
             } else {
-                $this->msg = "ERROR";
+                $this->data = "ERROR";
             } 
         } catch(Exception $e) {
             echo 'SQL Exception: ' .$e->getMessage();
         }
-        return $this->msg;
+        return $this->data;
     }
     
     //Deletes the Driver Location Entry
@@ -68,14 +56,14 @@ class CurrentLocationDataDAO
         try{
             $delete=mysqli_query($this->con,$query);
             if($delete){
-                $this->msg = array("result" => 1, "message" => "Successfully user deleted!");
+                $this->data = array("result" => 1, "message" => "Successfully user deleted!");
             } else {
-                $this->msg = array("result" => 0, "message" => "Error!");
+                $this->data = array("result" => 0, "message" => "Error!");
             }
         } catch(Exception $e) {
             echo 'SQL Exception: ' .$e->getMessage();
         }
-        return $this->msg;
+        return $this->data;
     }
 }
 ?>

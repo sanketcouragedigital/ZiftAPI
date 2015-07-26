@@ -1,5 +1,5 @@
 <?php
-require_once '../model/DriverLoginRegisterData.php';
+require_once '../model/UserReviewData.php';
 
 function deliver_response($format, $api_response, $isSaveQuery) {
 
@@ -59,7 +59,7 @@ $api_response_code = array(0 => array('HTTP Response' => 400, 'Message' => 'Unkn
 // Set default HTTP response of 'ok'
 $response['code'] = 0;
 $response['status'] = 404;
-$response['driverRegister'] = NULL;
+$response['reviewdata'] = NULL;
 
 // --- Step 2: Authorization
 
@@ -106,26 +106,23 @@ if ($authentication_required) {
 
 if (isset($_POST['method'])) {
 
-    if (strcasecmp($_POST['method'], 'register') == 0) {
+    if (strcasecmp($_POST['method'], 'userReview') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
-        $registerData = new DriverLoginRegisterData();
-        $name = stripslashes($_POST['name']);
-        $mobileno = stripslashes($_POST['mobileno']);
-        $taxino = stripslashes($_POST['taxino']);
-        $password = stripslashes($_POST['password']);
-        $isVerify = stripslashes($_POST['isVerify']);
-        $registerData->mapIncomingParams($name, $mobileno, $taxino, $password, $isVerify);
-        $response['driverRegister'] = $registerData -> driverRegisterData();
+        $review = new UserReviewData();
+        $serviceName = stripslashes($_POST['serviceName']);
+        $ratingNumber = stripslashes($_POST['ratingNumber']);
+        $comment = stripslashes($_POST['comment']);
+        $review->mapIncomingParams($serviceName, $ratingNumber, $comment);
+        $response['reviewdata'] = $review -> saveReview();
         deliver_response($_POST['format'], $response, true);
     }
-    if (strcasecmp($_POST['method'], 'login') == 0) {
+    if (strcasecmp($_POST['method'], 'hired') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
-        $loginData = new DriverLoginRegisterData();
+        $delete = new CurrentLocationData();
         $mobileno = stripslashes($_POST['mobileno']);
-        $password = stripslashes($_POST['password']);
-        $response['driverLogin'] = $loginData -> driverLoginData($mobileno, $password);
+        $response['deleteEntry'] = $delete -> deleteLocationEntry($mobileno);
         deliver_response($_POST['format'], $response, false);
     }
 }

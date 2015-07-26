@@ -62,11 +62,12 @@ class DriverLoginRegisterData
         return $returnRegisterMessage;
     }
     
-    public function deleteLocationEntry($mobileno) {
-        $currentLocationDataDAO = new CurrentLocationDataDAO();
+    public function driverLoginData($mobileno, $password) {
+        $driverLoginDataDAO = new DriverLoginRegisterDataDAO();
         $this->setMobileNo($mobileno);
-        $returnDeleteMessage = $currentLocationDataDAO->delete($this);
-        return $returnDeleteMessage;
+        $this->setPassword($password);
+        $returnLoginMessage = $driverLoginDataDAO->login($this);
+        return $returnLoginMessage;
     }
 }          
 ?>
