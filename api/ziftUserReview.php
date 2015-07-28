@@ -59,7 +59,6 @@ $api_response_code = array(0 => array('HTTP Response' => 400, 'Message' => 'Unkn
 // Set default HTTP response of 'ok'
 $response['code'] = 0;
 $response['status'] = 404;
-$response['reviewdata'] = NULL;
 
 // --- Step 2: Authorization
 
@@ -112,18 +111,21 @@ if (isset($_POST['method'])) {
         $review = new UserReviewData();
         $serviceName = stripslashes($_POST['serviceName']);
         $ratingNumber = stripslashes($_POST['ratingNumber']);
-        $comment = stripslashes($_POST['comment']);
+        $comment = stripslashes($_POST['comment']);		
         $review->mapIncomingParams($serviceName, $ratingNumber, $comment);
         $response['reviewdata'] = $review -> saveReview();
         deliver_response($_POST['format'], $response, true);
     }
-    if (strcasecmp($_POST['method'], 'hired') == 0) {
+}
+else if (isset($_GET['method'])){
+	
+    if (strcasecmp($_GET['method'], 'showReview') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
-        $delete = new CurrentLocationData();
-        $mobileno = stripslashes($_POST['mobileno']);
-        $response['deleteEntry'] = $delete -> deleteLocationEntry($mobileno);
-        deliver_response($_POST['format'], $response, false);
+        $fetch = new UserReviewData();
+		$serviceName = $_GET['serviceName'];
+        $response['showReviewData'] = $fetch -> showReview($serviceName);
+        deliver_response($_GET['format'], $response, false);
     }
 }
 ?>

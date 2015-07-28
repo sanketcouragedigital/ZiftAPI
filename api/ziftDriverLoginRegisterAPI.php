@@ -59,7 +59,6 @@ $api_response_code = array(0 => array('HTTP Response' => 400, 'Message' => 'Unkn
 // Set default HTTP response of 'ok'
 $response['code'] = 0;
 $response['status'] = 404;
-$response['driverRegister'] = NULL;
 
 // --- Step 2: Authorization
 

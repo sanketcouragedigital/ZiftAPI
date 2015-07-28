@@ -5,7 +5,6 @@ class UserReviewData
     private $serviceName;
     private $ratingNumber;
     private $comment;
-   
     
     public function setServiceName($serviceName) {
         $this->serviceName = $serviceName;
@@ -32,7 +31,6 @@ class UserReviewData
     }
     
     
-    
     public function mapIncomingParams($serviceName,$ratingNumber,$comment) {
         $this->setServiceName($serviceName);
         $this->setRatingNumber($ratingNumber);
@@ -46,11 +44,11 @@ class UserReviewData
         return $returnSuccessMessage;
     }
     
-    public function deleteLocationEntry($mobileno) {
-        $currentLocationDataDAO = new CurrentLocationDataDAO();
-        $this->setMobileNo($mobileno);
-        $returnDeleteMessage = $currentLocationDataDAO->delete($this);
-        return $returnDeleteMessage;
+    public function showReview($serviceName) {
+        $userShowReviewDataDAO = new UserReviewDataDAO();
+		$this->setServiceName($serviceName);
+        $returnShowData = $userShowReviewDataDAO->show($this);
+        return $returnShowData;
     }
 }          
 ?>
