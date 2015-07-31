@@ -1,5 +1,5 @@
 <?php
-require_once '../model/DriverLoginRegisterData.php';
+require_once '../model/DriverDetailsData.php';
 
 function deliver_response($format, $api_response, $isSaveQuery) {
 
@@ -108,23 +108,23 @@ if (isset($_POST['method'])) {
     if (strcasecmp($_POST['method'], 'register') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
-        $registerData = new DriverLoginRegisterData();
+        $registerData = new DriverDetailsData();
         $name = stripslashes($_POST['name']);
         $mobileno = stripslashes($_POST['mobileno']);
         $taxino = stripslashes($_POST['taxino']);
-        $password = stripslashes($_POST['password']);
         $isVerify = stripslashes($_POST['isVerify']);
-        $registerData->mapIncomingParams($name, $mobileno, $taxino, $password, $isVerify);
-        $response['driverRegister'] = $registerData -> driverRegisterData();
+        $registerData->mapIncomingParams($name, $mobileno, $taxino, $isVerify);
+        $response['driverRegister'] = $registerData -> registerDriverDetails();
         deliver_response($_POST['format'], $response, true);
     }
-    if (strcasecmp($_POST['method'], 'login') == 0) {
+    if (strcasecmp($_POST['method'], 'update') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
-        $loginData = new DriverLoginRegisterData();
-        $mobileno = stripslashes($_POST['mobileno']);
-        $password = stripslashes($_POST['password']);
-        $response['driverLogin'] = $loginData -> driverLoginData($mobileno, $password);
+        $updateData = new DriverDetailsData();
+        $oldmobileno = stripslashes($_POST['oldmobileno']);
+        $newmobileno = stripslashes($_POST['newmobileno']);
+        $newtaxino = stripslashes($_POST['newtaxino']);
+        $response['driverUpdate'] = $updateData -> updateDriverDetails($oldmobileno, $newmobileno, $newtaxino);
         deliver_response($_POST['format'], $response, false);
     }
 }

@@ -1,12 +1,12 @@
 <?php
-require_once '../dao/DriverLoginRegisterDataDAO.php';
-class DriverLoginRegisterData
+require_once '../dao/DriverDetailsDataDAO.php';
+class DriverDetailsData
 {
     private $name;
     private $mobileno;
     private $taxino;
-    private $password;
     private $isVerify;
+    private $oldmobileno;
     
     public function setName($name) {
         $this->name = $name;
@@ -32,14 +32,6 @@ class DriverLoginRegisterData
         return $this->taxino;
     }
     
-    public function setPassword($password) {
-        $this->password = $password;
-    }
-    
-    public function getPassword() {
-        return $this->password;
-    }
-    
     public function setIsVerify($isVerify) {
         $this->area = $isVerify;
     }
@@ -48,26 +40,34 @@ class DriverLoginRegisterData
         return $this->area;
     }
     
-    public function mapIncomingParams($name, $mobileno, $taxino, $password, $isVerify) {
+    public function setOldMobileNo($oldmobileno) {
+        $this->oldmobileno = $oldmobileno;
+    }
+    
+    public function getOldMobileNo() {
+        return $this->oldmobileno;
+    }
+    
+    public function mapIncomingParams($name, $mobileno, $taxino, $isVerify) {
         $this->setName($name);
         $this->setMobileNo($mobileno);
         $this->setTaxiNo($taxino);
-        $this->setPassword($password);
         $this->setIsVerify($isVerify);
     }
     
-    public function driverRegisterData(){
-        $driverRegisterDataDAO = new DriverLoginRegisterDataDAO();
+    public function registerDriverDetails(){
+        $driverRegisterDataDAO = new DriverDetailsDataDAO();
         $returnRegisterMessage = $driverRegisterDataDAO->register($this);
         return $returnRegisterMessage;
     }
     
-    public function driverLoginData($mobileno, $password) {
-        $driverLoginDataDAO = new DriverLoginRegisterDataDAO();
-        $this->setMobileNo($mobileno);
-        $this->setPassword($password);
-        $returnLoginMessage = $driverLoginDataDAO->login($this);
-        return $returnLoginMessage;
+    public function updateDriverDetails($oldmobileno, $newmobileno, $newtaxino) {
+        $driverUpdateDataDAO = new DriverDetailsDataDAO();
+        $this->setOldMobileNo($oldmobileno);
+        $this->setMobileNo($newmobileno);
+        $this->setTaxiNo($newtaxino);
+        $returnUpdateMessage = $driverUpdateDataDAO->check($this);
+        return $returnUpdateMessage;
     }
 }          
 ?>

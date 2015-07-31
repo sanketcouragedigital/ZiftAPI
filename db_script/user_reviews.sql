@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 31, 2015 at 11:25 AM
+-- Generation Time: Jul 31, 2015 at 11:31 AM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -23,33 +23,22 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `driver_location`
+-- Table structure for table `user_reviews`
 --
 
-CREATE TABLE IF NOT EXISTS `driver_location` (
+CREATE TABLE IF NOT EXISTS `user_reviews` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `mobileno` bigint(10) NOT NULL,
-  `latitude` float(10,6) NOT NULL,
-  `longitude` float(10,6) NOT NULL,
-  `location_area` varchar(30) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `mobileno` (`mobileno`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=82 ;
+  `serviceName` varchar(50) NOT NULL,
+  `rating` int(11) NOT NULL,
+  `comment` varchar(500) NOT NULL,
+  `date` timestamp NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
--- Dumping data for table `driver_location`
+-- Dumping data for table `user_reviews`
 --
 
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `driver_location`
---
-ALTER TABLE `driver_location`
-  ADD CONSTRAINT `driver_location_ibfk_1` FOREIGN KEY (`mobileno`) REFERENCES `driver_details` (`mobileno`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

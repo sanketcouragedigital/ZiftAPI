@@ -125,5 +125,46 @@ if (isset($_POST['method'])) {
         $response['deleteEntry'] = $delete -> deleteLocationEntry($mobileno);
         deliver_response($_POST['format'], $response, false);
     }
+    if (strcasecmp($_POST['method'], 'userReview') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $review = new CurrentLocationData();
+        $serviceName = stripslashes($_POST['serviceName']);
+        $ratingNumber = stripslashes($_POST['ratingNumber']);
+        $comment = stripslashes($_POST['comment']);     
+        $review->mapIncomingReviewParams($serviceName, $ratingNumber, $comment);
+        $response['reviewdata'] = $review -> saveReview();
+        deliver_response($_POST['format'], $response, true);
+    }
+    if (strcasecmp($_POST['method'], 'userFeedback') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $objFeedback = new CurrentLocationData();
+        $mobileno = stripslashes($_POST['mobileno']);
+        $email = stripslashes($_POST['email']);
+        $feedback = stripslashes($_POST['feedback']);
+        $objFeedback->mapIncomingFeedbackParams($mobileno, $email, $feedback);
+        $response['mailFeedback'] = $objFeedback -> sendFeedbackEmailToAdmin();
+        deliver_response($_POST['format'], $response, true);
+    }
+}
+else if (isset($_GET['method'])) {
+    if(strcasecmp($_GET['method'], 'nearme') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $nearDrivers = new CurrentLocationData();
+        $userLatitude = stripslashes($_GET['userLatitude']);
+        $userLongitude = stripslashes($_GET['userLongitude']);
+        $response['nearestDrivers'] = $nearDrivers->findNearestDrivers($userLatitude, $userLongitude);
+        deliver_response($_GET['format'], $response, false);
+    }
+    if (strcasecmp($_GET['method'], 'showReview') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $fetch = new CurrentLocationData();
+        $serviceName = $_GET['serviceName'];
+        $response['showReviewData'] = $fetch -> showReview($serviceName);
+        deliver_response($_GET['format'], $response, false);
+    }
 }
 ?>

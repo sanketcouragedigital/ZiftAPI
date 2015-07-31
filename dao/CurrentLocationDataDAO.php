@@ -6,6 +6,7 @@ class CurrentLocationDataDAO
     
     private $con;
     private $msg;
+    private $data;
     
     // Attempts to initialize the database connection using the supplied info.
     public function CurrentLocationDataDAO() {
@@ -76,6 +77,62 @@ class CurrentLocationDataDAO
             echo 'SQL Exception: ' .$e->getMessage();
         }
         return $this->msg;
+    }
+    
+    //Find the nearest drivers from the database.
+    public function find($latlong) {
+        $query="SELECT dd.name, dd.taxino, dd.mobileno, dd.isVerify, ( 3959 * acos( cos( radians('".$latlong->getLatitude()."') ) * cos( radians( dl.latitude ) ) * cos( radians( dl.longitude ) - radians('".$latlong->getLongitude()."') ) + sin( radians('".$latlong->getLatitude()."') ) * sin( radians( dl.latitude ) ) ) ) * 1.609344 AS distance
+                FROM driver_details dd
+                INNER JOIN driver_location dl
+                ON dd.mobileno = dl.mobileno
+                HAVING distance < 5 ORDER BY distance";
+        
+        try {
+            $select=mysqli_query($this->con,$query);
+            $this->getDriverLocationAndDetails=array();
+            while ($rowdata = mysqli_fetch_assoc($select)) {
+                $this->getDriverLocationAndDetails[]=$rowdata;
+            }
+        } catch(Exception $e) {
+            echo 'SQL Exception: ' .$e->getMessage();
+        }
+        return $this->getDriverLocationAndDetails;
+    }
+    
+    //Save the review of user from the database.
+    public function saveReview($review) {
+        //include_once ('db_config.php');
+        
+        $sql = "INSERT INTO user_reviews(serviceName,rating,comment,date)VALUES('".$review->getServiceName()."', '".$review->getRatingNumber()."', '".$review->getComment()."', UTC_TIMESTAMP() )";
+        
+        try {
+            $isInserted = mysqli_query($this->con,$sql);
+            if ($isInserted) {
+                $this->data = "REVIEW_SAVED";
+            } else {
+                $this->data = "ERROR";
+            } 
+        } catch(Exception $e) {
+            echo 'SQL Exception: ' .$e->getMessage();
+        }
+        return $this->data;
+    }
+    
+    //Show the review of users from the database.
+    public function showReview($reviewByServiceName) {
+        //include_once ('db_config.php');
+        $sql = "SELECT * FROM user_reviews WHERE serviceName='".$reviewByServiceName->getServiceName()."' ORDER BY date DESC";
+        
+        try {
+            $select = mysqli_query($this->con,$sql);
+            $this->data=array();
+            while ($rowdata = mysqli_fetch_assoc($select)) {
+                $this->data[]=$rowdata;
+            }
+        } catch(Exception $e) {
+            echo 'SQL Exception: ' .$e->getMessage();
+        }
+        return $this->data;
     }
 }
 ?>
