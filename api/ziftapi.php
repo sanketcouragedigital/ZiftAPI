@@ -147,6 +147,45 @@ if (isset($_POST['method'])) {
         $response['mailFeedback'] = $objFeedback -> sendFeedbackEmailToAdmin();
         deliver_response($_POST['format'], $response, true);
     }
+    if (strcasecmp($_POST['method'], 'phd') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $objPHD = new CurrentLocationData();
+        $logo_tmp = "";
+        $target_path = "";
+        $serviceName = stripslashes($_POST['serviceName']);
+        $mobileno = stripslashes($_POST['mobileno']);
+        $city = stripslashes($_POST['city']);
+        $isVerify = stripslashes($_POST['isVerify']);
+        if(isset($_FILES['logo'])){
+            $logo_tmp = $_FILES['logo']['tmp_name'];
+            $logo_name = $_FILES['logo']['name'];
+            $target_path = "../phd_images/".$logo_name;
+        }
+        $objPHD->mapIncomingPHDParams($logo_tmp, $target_path, $serviceName, $mobileno, $city, $isVerify);
+        $response['responsePHD'] = $objPHD -> savePHDDetails();
+        deliver_response($_POST['format'], $response, true);
+    }
+    if (strcasecmp($_POST['method'], 'deals') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $objDeals = new CurrentLocationData();
+        $logo_tmp = "";
+        $target_path = "";
+        $companyName = stripslashes($_POST['companyName']);
+        $offer = stripslashes($_POST['offer']);
+        $offerCode = stripslashes($_POST['offerCode']);
+        $validUptoDate = stripslashes($_POST['validUptoDate']);
+        $offerTerms = stripslashes($_POST['offerTerms']);
+        if(isset($_FILES['logo'])){
+            $logo_tmp = $_FILES['logo']['tmp_name'];
+            $logo_name = $_FILES['logo']['name'];
+            $target_path = "../deals_images/".$logo_name;
+        }
+        $objDeals->mapIncomingDealsParams($logo_tmp, $target_path, $companyName, $offer, $offerCode, $validUptoDate, $offerTerms);
+        $response['responseDeals'] = $objDeals -> saveDealsDetails();
+        deliver_response($_POST['format'], $response, true);
+    }
 }
 else if (isset($_GET['method'])) {
     if(strcasecmp($_GET['method'], 'nearme') == 0) {
@@ -164,6 +203,13 @@ else if (isset($_GET['method'])) {
         $fetch = new CurrentLocationData();
         $serviceName = $_GET['serviceName'];
         $response['showReviewData'] = $fetch -> showReview($serviceName);
+        deliver_response($_GET['format'], $response, false);
+    }
+    if (strcasecmp($_GET['method'], 'showDeals') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $fetchDeals = new CurrentLocationData();
+        $response['showDealsList'] = $fetchDeals -> showDealsDetails();
         deliver_response($_GET['format'], $response, false);
     }
 }

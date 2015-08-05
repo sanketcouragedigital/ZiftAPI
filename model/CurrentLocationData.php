@@ -12,6 +12,15 @@ class CurrentLocationData
     private $comment;
     private $email;
     private $feedback;
+    private $logo_tmp;
+    private $target_path;
+    private $city;
+    private $isVerify;
+    private $companyName;
+    private $offer;
+    private $offerCode;
+    private $validUptoDate;
+    private $offerTerms;
     
     public function setMobileNo($mobileno) {
         $this->mobileno = $mobileno;
@@ -85,6 +94,78 @@ class CurrentLocationData
         return $this->feedback;
     }
     
+    public function setLogoTemporaryName($logo_tmp) {
+        $this->logo_tmp = $logo_tmp;
+    }
+    
+    public function getLogoTemporaryName() {
+        return $this->logo_tmp;
+    }
+    
+    public function setTargetPathOfImage($target_path) {
+        $this->target_path = $target_path;
+    }
+    
+    public function getTargetPathOfImage() {
+        return $this->target_path;
+    }
+    
+    public function setCity($city) {
+        $this->city = $city;
+    }
+    
+    public function getCity() {
+        return $this->city;
+    }
+    
+    public function setIsVerify($isVerify) {
+        $this->isVerify = $isVerify;
+    }
+    
+    public function getIsVerify() {
+        return $this->isVerify;
+    }
+    
+    public function setCompanyName($companyName) {
+        $this->companyName = $companyName;
+    }
+    
+    public function getCompanyName() {
+        return $this->companyName;
+    }
+    
+    public function setOffer($offer) {
+        $this->offer = $offer;
+    }
+    
+    public function getOffer() {
+        return $this->offer;
+    }
+    
+    public function setOfferCode($offerCode) {
+        $this->offerCode = $offerCode;
+    }
+    
+    public function getOfferCode() {
+        return $this->offerCode;
+    }
+    
+    public function setValidUptoDate($validUptoDate) {
+        $this->validUptoDate = $validUptoDate;
+    }
+    
+    public function getValidUptoDate() {
+        return $this->validUptoDate;
+    }
+    
+    public function setOfferTerms($offerTerms) {
+        $this->offerTerms = $offerTerms;
+    }
+    
+    public function getOfferTerms() {
+        return $this->offerTerms;
+    }
+    
     public function mapIncomingParams($mobileno,$latitude,$longitude,$area) {
         $this->setMobileNo($mobileno);
         $this->setLatitude($latitude);
@@ -102,6 +183,25 @@ class CurrentLocationData
         $this->setMobileNo($mobileno);
         $this->setEmail($email);
         $this->setFeedback($feedback);
+    }
+    
+    public function mapIncomingPHDParams($logo_tmp, $target_path, $serviceName, $mobileno, $city, $isVerify) {
+        $this->setLogoTemporaryName($logo_tmp);
+        $this->setTargetPathOfImage($target_path);
+        $this->setServiceName($serviceName);
+        $this->setMobileNo($mobileno);
+        $this->setCity($city);
+        $this->setIsVerify($isVerify);
+    }
+    
+    public function mapIncomingDealsParams($logo_tmp, $target_path, $companyName, $offer, $offerCode, $validUptoDate, $offerTerms) {
+        $this->setLogoTemporaryName($logo_tmp);
+        $this->setTargetPathOfImage($target_path);
+        $this->setCompanyName($companyName);
+        $this->setOffer($offer);
+        $this->setOfferCode($offerCode);
+        $this->setValidUptoDate($validUptoDate);
+        $this->setOfferTerms($offerTerms);
     }
     
     public function locationData(){
@@ -152,6 +252,24 @@ class CurrentLocationData
         $emailMessage.= "Email: ".$this->email."\n";
         $emailMessage.= "Feedback: ".$this->feedback;
         return $emailMessage;
+    }
+    
+    public function savePHDDetails() {
+        $PHDDetailsDAO = new CurrentLocationDataDAO();
+        $returnPHDSuccessMessage = $PHDDetailsDAO->savePHD($this);
+        return $returnPHDSuccessMessage;
+    }
+    
+    public function saveDealsDetails() {
+        $DealsDetailsDAO = new CurrentLocationDataDAO();
+        $returnDealsSuccessMessage = $DealsDetailsDAO->saveDeals($this);
+        return $returnDealsSuccessMessage;
+    }
+    
+    public function showDealsDetails() {
+        $showDealsDataDAO = new CurrentLocationDataDAO();
+        $returnShowDealsDetails = $showDealsDataDAO->showDeals($this);
+        return $returnShowDealsDetails;
     }
 }          
 ?>

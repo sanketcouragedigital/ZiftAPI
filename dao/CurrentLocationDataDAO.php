@@ -134,5 +134,75 @@ class CurrentLocationDataDAO
         }
         return $this->data;
     }
+        
+    public function savePHD($PHDDetails) {
+        try{
+            if($PHDDetails->getLogoTemporaryName()=="") {
+                $query="INSERT INTO phd_details(serviceName, mobileno, city, isVerify)VALUES
+                ('".$PHDDetails->getServiceName()."','".$PHDDetails->getMobileNo()."','".$PHDDetails->getCity()."','".$PHDDetails->getIsVerify()."')";
+                $isInserted = mysqli_query($this->con, $query);
+                if ($isInserted) {
+                    $this->data = "PHD_DETAILS_SAVED";
+                } else {
+                    $this->data = "ERROR";
+                }
+            }
+            else if($PHDDetails->getLogoTemporaryName()!=="") { 
+                if(move_uploaded_file($PHDDetails->getLogoTemporaryName(), $PHDDetails->getTargetPathOfImage())) {
+                    $query="INSERT INTO phd_details(image_path, serviceName, mobileno, city, isVerify)VALUES
+                    ('".$PHDDetails->getTargetPathOfImage()."','".$PHDDetails->getServiceName()."','".$PHDDetails->getMobileNo()."','".$PHDDetails->getCity()."','".$PHDDetails->getIsVerify()."')";
+                    $isInserted = mysqli_query($this->con, $query);
+                    if ($isInserted) {
+                        $this->data = "PHD_DETAILS_SAVED";
+                    } else {
+                        $this->data = "ERROR";
+                    }
+                } else {
+                    $this->data = "ERROR";
+                }
+            }
+        }
+        catch(Exception $e) {   
+            echo 'SQL Exception: ' .$e->getMessage();
+        }
+        return $this->data;
+    }
+
+    public function saveDeals($deals) {
+        //include_once ('db_config.php');
+        try {
+            $date = date_create($deals->getValidUptoDate());
+            $validUptoDate =  date_format($date, 'Y-m-d');
+            if($deals->getLogoTemporaryName()=="") {
+                $sql = "INSERT INTO deals(companyName,offer,offerCode,validUptoDate,offerTerms)VALUES
+                ('".$deals->getCompanyName()."', '".$deals->getOffer()."', '".$deals->getOfferCode()."', '".$validUptoDate."', '".$deals->getOfferTerms()."')";
+        
+                $isInserted = mysqli_query($this->con,$sql);
+                if ($isInserted) {
+                    $this->data = "DEAL_SAVED";
+                } else {
+                    $this->data = "ERROR";
+                }
+            }
+            else if($deals->getLogoTemporaryName()!=="") {
+            if(move_uploaded_file($deals->getLogoTemporaryName(), $deals->getTargetPathOfImage())) {
+                $sql = "INSERT INTO deals(image_path,companyName,offer,offerCode,offerTerms)VALUES
+                ('".$deals->getTargetPathOfImage()."', '".$deals->getCompanyName()."', '".$deals->getOffer()."', '".$deals->getOfferCode()."', '".$validUptoDate."', '".$deals->getOfferTerms()."')";
+        
+                $isInserted = mysqli_query($this->con,$sql);
+                if ($isInserted) {
+                    $this->data = "DEAL_SAVED";
+                } else {
+                    $this->data = "ERROR";
+                }
+            } else {
+                $this->data = "ERROR";
+            }
+            }
+        } catch(Exception $e) {
+            echo 'SQL Exception: ' .$e->getMessage();
+        }
+        return $this->data;
+    }
 }
 ?>
