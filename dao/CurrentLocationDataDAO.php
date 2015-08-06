@@ -171,9 +171,8 @@ class CurrentLocationDataDAO
     public function saveDeals($deals) {
         //include_once ('db_config.php');
         try {
-            $date = date_create($deals->getValidUptoDate());
-            $validUptoDate =  date_format($date, 'Y-m-d');
             if($deals->getLogoTemporaryName()=="") {
+                $validUptoDate =  DateTime::createFromFormat('d/m/Y', $deals->getValidUptoDate())->format('Y-m-d');
                 $sql = "INSERT INTO deals(companyName,offer,offerCode,validUptoDate,offerTerms)VALUES
                 ('".$deals->getCompanyName()."', '".$deals->getOffer()."', '".$deals->getOfferCode()."', '".$validUptoDate."', '".$deals->getOfferTerms()."')";
         
@@ -186,7 +185,8 @@ class CurrentLocationDataDAO
             }
             else if($deals->getLogoTemporaryName()!=="") {
             if(move_uploaded_file($deals->getLogoTemporaryName(), $deals->getTargetPathOfImage())) {
-                $sql = "INSERT INTO deals(image_path,companyName,offer,offerCode,offerTerms)VALUES
+                $validUptoDate =  DateTime::createFromFormat('d/m/Y', $deals->getValidUptoDate())->format('Y-m-d');
+                $sql = "INSERT INTO deals(image_path,companyName,offer,offerCode,validUptoDate,offerTerms)VALUES
                 ('".$deals->getTargetPathOfImage()."', '".$deals->getCompanyName()."', '".$deals->getOffer()."', '".$deals->getOfferCode()."', '".$validUptoDate."', '".$deals->getOfferTerms()."')";
         
                 $isInserted = mysqli_query($this->con,$sql);
