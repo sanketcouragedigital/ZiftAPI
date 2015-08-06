@@ -204,5 +204,35 @@ class CurrentLocationDataDAO
         }
         return $this->data;
     }
+
+    public function showPHD() {
+        $sql = "SELECT * FROM phd_details";
+        
+        try {
+            $select = mysqli_query($this->con,$sql);
+            $this->data=array();
+            while ($rowdata = mysqli_fetch_assoc($select)) {
+                $this->data[]=$rowdata;
+            }
+        } catch(Exception $e) {
+            echo 'SQL Exception: ' .$e->getMessage();
+        }
+        return $this->data;
+    }
+    
+    public function showDeals() {
+        $sql = "SELECT * FROM deals";
+        
+        try {
+            $select = mysqli_query($this->con,$sql);
+            $this->data=array();
+            while ($rowdata = mysqli_fetch_assoc($select)) {
+                $this->data[]=$rowdata;
+            }
+        } catch(Exception $e) {
+            echo 'SQL Exception: ' .$e->getMessage();
+        }
+        return $this->data;
+    }
 }
 ?>

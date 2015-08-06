@@ -266,6 +266,12 @@ class CurrentLocationData
         return $returnDealsSuccessMessage;
     }
     
+    public function showPHDDetails() {
+        $showPHDDataDAO = new CurrentLocationDataDAO();
+        $returnShowPHDDetails = $showPHDDataDAO->showPHD($this);
+        return $returnShowPHDDetails;
+    }
+    
     public function showDealsDetails() {
         $showDealsDataDAO = new CurrentLocationDataDAO();
         $returnShowDealsDetails = $showDealsDataDAO->showDeals($this);

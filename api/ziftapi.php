@@ -98,6 +98,19 @@ if ($authentication_required) {
     }
 
 }
+// Get Image Extension og logo.
+function GetImageExtension($imagetype) {
+    if(empty($imagetype)) return false;
+    switch($imagetype)
+    {
+        case 'image/bmp': return '.bmp';
+        case 'image/gif': return '.gif';
+        case 'image/jpeg': return '.jpeg';
+        case 'image/jpg': return '.jpg';
+        case 'image/png': return '.png';
+        default: return false;
+    }
+}
 
 // --- Step 3: Process Request
 
@@ -160,7 +173,10 @@ if (isset($_POST['method'])) {
         if(isset($_FILES['logo'])){
             $logo_tmp = $_FILES['logo']['tmp_name'];
             $logo_name = $_FILES['logo']['name'];
-            $target_path = "../phd_images/".$logo_name;
+            $imgtype = $_FILES['logo']['type'];
+            $ext = GetImageExtension($imgtype);
+            $logo_changed_name = date("d-m-Y")."-".time().$ext;
+            $target_path = "../phd_images/".$logo_changed_name;
         }
         $objPHD->mapIncomingPHDParams($logo_tmp, $target_path, $serviceName, $mobileno, $city, $isVerify);
         $response['responsePHD'] = $objPHD -> savePHDDetails();
@@ -180,7 +196,10 @@ if (isset($_POST['method'])) {
         if(isset($_FILES['logo'])){
             $logo_tmp = $_FILES['logo']['tmp_name'];
             $logo_name = $_FILES['logo']['name'];
-            $target_path = "../deals_images/".$logo_name;
+            $imgtype = $_FILES['logo']['type'];
+            $ext = GetImageExtension($imgtype);
+            $logo_changed_name = date("d-m-Y")."-".time().$ext;
+            $target_path = "../deals_images/".$logo_changed_name;
         }
         $objDeals->mapIncomingDealsParams($logo_tmp, $target_path, $companyName, $offer, $offerCode, $validUptoDate, $offerTerms);
         $response['responseDeals'] = $objDeals -> saveDealsDetails();
@@ -203,6 +222,13 @@ else if (isset($_GET['method'])) {
         $fetch = new CurrentLocationData();
         $serviceName = $_GET['serviceName'];
         $response['showReviewData'] = $fetch -> showReview($serviceName);
+        deliver_response($_GET['format'], $response, false);
+    }
+    if (strcasecmp($_GET['method'], 'showPHD') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $fetchPHD = new CurrentLocationData();
+        $response['showPHDList'] = $fetchPHD -> showPHDDetails();
         deliver_response($_GET['format'], $response, false);
     }
     if (strcasecmp($_GET['method'], 'showDeals') == 0) {
