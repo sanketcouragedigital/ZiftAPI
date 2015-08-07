@@ -1,5 +1,10 @@
 <?php
 require_once '../model/CurrentLocationData.php';
+require_once '../model/NearestDriverData.php';
+require_once '../model/UserReviewData.php';
+require_once '../model/UserFeedbackData.php';
+require_once '../model/PartyHardDriverData.php';
+require_once '../model/DealsData.php';
 
 function deliver_response($format, $api_response, $isSaveQuery) {
 
@@ -126,7 +131,7 @@ if (isset($_POST['method'])) {
         $latitude = stripslashes($_POST['latitude']);
         $longitude = stripslashes($_POST['longitude']);
         $area = stripslashes($_POST['area']);
-        $location->mapIncomingParams($mobileno, $latitude, $longitude, $area);
+        $location->mapIncomingLocationParams($mobileno, $latitude, $longitude, $area);
         $response['forHireData'] = $location -> locationData();
         deliver_response($_POST['format'], $response, true);
     }
@@ -141,7 +146,7 @@ if (isset($_POST['method'])) {
     if (strcasecmp($_POST['method'], 'userReview') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
-        $review = new CurrentLocationData();
+        $review = new UserReviewData();
         $serviceName = stripslashes($_POST['serviceName']);
         $ratingNumber = stripslashes($_POST['ratingNumber']);
         $comment = stripslashes($_POST['comment']);     
@@ -152,7 +157,7 @@ if (isset($_POST['method'])) {
     if (strcasecmp($_POST['method'], 'userFeedback') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
-        $objFeedback = new CurrentLocationData();
+        $objFeedback = new UserFeedbackData();
         $mobileno = stripslashes($_POST['mobileno']);
         $email = stripslashes($_POST['email']);
         $feedback = stripslashes($_POST['feedback']);
@@ -163,7 +168,7 @@ if (isset($_POST['method'])) {
     if (strcasecmp($_POST['method'], 'phd') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
-        $objPHD = new CurrentLocationData();
+        $objPHD = new PartyHardDriverData();
         $logo_tmp = "";
         $target_path = "";
         $serviceName = stripslashes($_POST['serviceName']);
@@ -185,7 +190,7 @@ if (isset($_POST['method'])) {
     if (strcasecmp($_POST['method'], 'deals') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
-        $objDeals = new CurrentLocationData();
+        $objDeals = new DealsData();
         $logo_tmp = "";
         $target_path = "";
         $companyName = stripslashes($_POST['companyName']);
@@ -210,7 +215,7 @@ else if (isset($_GET['method'])) {
     if(strcasecmp($_GET['method'], 'nearme') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
-        $nearDrivers = new CurrentLocationData();
+        $nearDrivers = new NearestDriverData();
         $userLatitude = stripslashes($_GET['userLatitude']);
         $userLongitude = stripslashes($_GET['userLongitude']);
         $response['nearestDrivers'] = $nearDrivers->findNearestDrivers($userLatitude, $userLongitude);
@@ -219,7 +224,7 @@ else if (isset($_GET['method'])) {
     if (strcasecmp($_GET['method'], 'showReview') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
-        $fetch = new CurrentLocationData();
+        $fetch = new UserReviewData();
         $serviceName = $_GET['serviceName'];
         $response['showReviewData'] = $fetch -> showReview($serviceName);
         deliver_response($_GET['format'], $response, false);
@@ -227,14 +232,14 @@ else if (isset($_GET['method'])) {
     if (strcasecmp($_GET['method'], 'showPHD') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
-        $fetchPHD = new CurrentLocationData();
+        $fetchPHD = new PartyHardDriverData();
         $response['showPHDList'] = $fetchPHD -> showPHDDetails();
         deliver_response($_GET['format'], $response, false);
     }
     if (strcasecmp($_GET['method'], 'showDeals') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
-        $fetchDeals = new CurrentLocationData();
+        $fetchDeals = new DealsData();
         $response['showDealsList'] = $fetchDeals -> showDealsDetails();
         deliver_response($_GET['format'], $response, false);
     }
