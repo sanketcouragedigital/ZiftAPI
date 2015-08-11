@@ -19,8 +19,8 @@ class DealsDataDAO
         try {
             if($deals->getLogoTemporaryName()=="") {
                 $validUptoDate =  DateTime::createFromFormat('d/m/Y', $deals->getValidUptoDate())->format('Y-m-d');
-                $sql = "INSERT INTO deals(companyName,offer,offerCode,validUptoDate,offerTerms)VALUES
-                ('".$deals->getCompanyName()."', '".$deals->getOffer()."', '".$deals->getOfferCode()."', '".$validUptoDate."', '".$deals->getOfferTerms()."')";
+                $sql = "INSERT INTO deals(companyName,offer,offerCode,validUptoDate,offerTerms,isVerify)VALUES
+                ('".$deals->getCompanyName()."', '".$deals->getOffer()."', '".$deals->getOfferCode()."', '".$validUptoDate."', '".$deals->getOfferTerms()."', '".$deals->getIsVerify()."')";
         
                 $isInserted = mysqli_query($this->con,$sql);
                 if ($isInserted) {
@@ -32,8 +32,8 @@ class DealsDataDAO
             else if($deals->getLogoTemporaryName()!=="") {
             if(move_uploaded_file($deals->getLogoTemporaryName(), $deals->getTargetPathOfImage())) {
                 $validUptoDate =  DateTime::createFromFormat('d/m/Y', $deals->getValidUptoDate())->format('Y-m-d');
-                $sql = "INSERT INTO deals(image_path,companyName,offer,offerCode,validUptoDate,offerTerms)VALUES
-                ('".$deals->getTargetPathOfImage()."', '".$deals->getCompanyName()."', '".$deals->getOffer()."', '".$deals->getOfferCode()."', '".$validUptoDate."', '".$deals->getOfferTerms()."')";
+                $sql = "INSERT INTO deals(image_path,companyName,offer,offerCode,validUptoDate,offerTerms,isVerify)VALUES
+                ('".$deals->getTargetPathOfImage()."', '".$deals->getCompanyName()."', '".$deals->getOffer()."', '".$deals->getOfferCode()."', '".$validUptoDate."', '".$deals->getOfferTerms()."', '".$deals->getIsVerify()."')";
         
                 $isInserted = mysqli_query($this->con,$sql);
                 if ($isInserted) {
@@ -59,6 +59,22 @@ class DealsDataDAO
             $this->data=array();
             while ($rowdata = mysqli_fetch_assoc($select)) {
                 $this->data[]=$rowdata;
+            }
+        } catch(Exception $e) {
+            echo 'SQL Exception: ' .$e->getMessage();
+        }
+        return $this->data;
+    }
+    
+    public function deleteDeals($dealsRow) {
+        $query="DELETE FROM deals WHERE offerCode = '".$dealsRow->getOfferCode()."'";
+        
+        try{
+            $delete=mysqli_query($this->con,$query);
+            if($delete){
+                $this->data = array("result" => 1, "message" => "Successfully user deleted!");
+            } else {
+                $this->data = array("result" => 0, "message" => "Error!");
             }
         } catch(Exception $e) {
             echo 'SQL Exception: ' .$e->getMessage();

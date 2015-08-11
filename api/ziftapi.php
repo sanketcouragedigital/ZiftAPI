@@ -5,6 +5,7 @@ require_once '../model/UserReviewData.php';
 require_once '../model/UserFeedbackData.php';
 require_once '../model/PartyHardDriverData.php';
 require_once '../model/DealsData.php';
+require_once '../model/CarLoadData.php';
 
 function deliver_response($format, $api_response, $isSaveQuery) {
 
@@ -198,6 +199,7 @@ if (isset($_POST['method'])) {
         $offerCode = stripslashes($_POST['offerCode']);
         $validUptoDate = stripslashes($_POST['validUptoDate']);
         $offerTerms = stripslashes($_POST['offerTerms']);
+        $isVerify = stripslashes($_POST['isVerify']);
         if(isset($_FILES['logo'])){
             $logo_tmp = $_FILES['logo']['tmp_name'];
             $logo_name = $_FILES['logo']['name'];
@@ -206,9 +208,34 @@ if (isset($_POST['method'])) {
             $logo_changed_name = date("d-m-Y")."-".time().$ext;
             $target_path = "../deals_images/".$logo_changed_name;
         }
-        $objDeals->mapIncomingDealsParams($logo_tmp, $target_path, $companyName, $offer, $offerCode, $validUptoDate, $offerTerms);
+        $objDeals->mapIncomingDealsParams($logo_tmp, $target_path, $companyName, $offer, $offerCode, $validUptoDate, $offerTerms, $isVerify);
         $response['responseDeals'] = $objDeals -> saveDealsDetails();
         deliver_response($_POST['format'], $response, true);
+    }
+    if (strcasecmp($_POST['method'], 'deletePHD') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $callFunctionDeletePHD = new PartyHardDriverData();
+        $mobileno = stripslashes($_POST['mobileno']);
+        $response['deleteResponsePHD'] = $callFunctionDeletePHD -> deletePartyHardDriverRow($mobileno);
+        deliver_response($_POST['format'], $response, false);
+    }
+    if (strcasecmp($_POST['method'], 'deleteDeals') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $callFunctionDeleteDeals = new DealsData();
+        $offerCode = stripslashes($_POST['offerCode']);
+        $response['deleteResponseDeals'] = $callFunctionDeleteDeals -> deleteDealsRow($offerCode);
+        deliver_response($_POST['format'], $response, false);
+    }
+    if(strcasecmp($_POST['method'],'selfdrivecar')==0){
+        $response['code']=1;
+        $response['status']=$api_response_code[$response['code']]['HTTP Response'];
+        $objSelfdrivecar=new CarLoadData();
+        $carMake=stripslashes($_POST['carMake']);
+        $objSelfdrivecar->mapIncomingSelfdrivecarParams($carMake);
+        $response['responseSelfdrivecar']=$objSelfdrivecar->saveSelfdrivecarDetails();
+        deliver_response($_POST['format'],$response,true);
     }
 }
 else if (isset($_GET['method'])) {
@@ -242,6 +269,14 @@ else if (isset($_GET['method'])) {
         $fetchDeals = new DealsData();
         $response['showDealsList'] = $fetchDeals -> showDealsDetails();
         deliver_response($_GET['format'], $response, false);
+    }
+    if(strcasecmp($_GET['method'],'loadCars')==0){
+        $response['code']=1;
+        $response['status']=$api_response_code[$response['code']]['HTTP Response'];
+        $fetchCars=new CarLoadData();
+        $selectedTypeOfCar=$_GET['selectedTypeOfCar'];
+        $response['loadCarsList']=$fetchCars -> loadCarsDetails($selectedTypeOfCar);
+        deliver_response($_GET['format'],$response,false);
     }
 }
 ?>

@@ -61,5 +61,21 @@ class PartyHardDriverDataDAO
         }
         return $this->data;
     }
+    
+    public function deletePHD($phdRow) {
+        $query="DELETE FROM phd_details WHERE mobileno = '".$phdRow->getMobileNo()."'";
+        
+        try{
+            $delete=mysqli_query($this->con,$query);
+            if($delete){
+                $this->data = array("result" => 1, "message" => "Successfully user deleted!");
+            } else {
+                $this->data = array("result" => 0, "message" => "Error!");
+            }
+        } catch(Exception $e) {
+            echo 'SQL Exception: ' .$e->getMessage();
+        }
+        return $this->data;
+    }
 }
 ?>

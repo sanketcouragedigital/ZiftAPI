@@ -9,6 +9,7 @@ class DealsData
     private $offerCode;
     private $validUptoDate;
     private $offerTerms;
+    private $isVerify;
 
     public function setLogoTemporaryName($logo_tmp) {
         $this->logo_tmp = $logo_tmp;
@@ -65,8 +66,16 @@ class DealsData
     public function getOfferTerms() {
         return $this->offerTerms;
     }
+    
+    public function setIsVerify($isVerify) {
+        $this->isVerify = $isVerify;
+    }
+    
+    public function getIsVerify() {
+        return $this->isVerify;
+    }
 
-    public function mapIncomingDealsParams($logo_tmp, $target_path, $companyName, $offer, $offerCode, $validUptoDate, $offerTerms) {
+    public function mapIncomingDealsParams($logo_tmp, $target_path, $companyName, $offer, $offerCode, $validUptoDate, $offerTerms, $isVerify) {
         $this->setLogoTemporaryName($logo_tmp);
         $this->setTargetPathOfImage($target_path);
         $this->setCompanyName($companyName);
@@ -74,6 +83,7 @@ class DealsData
         $this->setOfferCode($offerCode);
         $this->setValidUptoDate($validUptoDate);
         $this->setOfferTerms($offerTerms);
+        $this->setIsVerify($isVerify);
     }
 
     public function saveDealsDetails() {
@@ -86,6 +96,13 @@ class DealsData
         $showDealsDataDAO = new DealsDataDAO();
         $returnShowDealsDetails = $showDealsDataDAO->showDeals($this);
         return $returnShowDealsDetails;
+    }
+    
+    public function deleteDealsRow($offerCode) {
+        $deleteDealsRowDAO = new DealsDataDAO();
+        $this->setOfferCode($offerCode);
+        $returnDeleteDealsMessage = $deleteDealsRowDAO->deleteDeals($this);
+        return $returnDeleteDealsMessage;
     }
 }
 ?>

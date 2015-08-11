@@ -77,5 +77,12 @@ class PartyHardDriverData
         $returnShowPHDDetails = $showPHDDataDAO->showPHD($this);
         return $returnShowPHDDetails;
     }
+    
+    public function deletePartyHardDriverRow($mobileno) {
+        $deletePHDRowDAO = new PartyHardDriverDataDAO();
+        $this->setMobileNo($mobileno);
+        $returnDeletePHDMessage = $deletePHDRowDAO->deletePHD($this);
+        return $returnDeletePHDMessage;
+    }
 }
 ?>
