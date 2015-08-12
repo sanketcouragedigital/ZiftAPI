@@ -15,7 +15,7 @@ class CarLoadDataDAO
     }
 	
 	public function loadCars($cars){
-		$sql="SELECT carMake FROM self_drive_car WHERE carType='".$cars->getSelectedTypeOfCar()."' ";
+		$sql="SELECT DISTINCT carMake FROM self_drive_car WHERE carType='".$cars->getSelectedTypeOfCar()."' ";
 		try{
 			$select= mysqli_query($this->con,$sql);
 			$this->data=array();
@@ -29,7 +29,12 @@ class CarLoadDataDAO
 		return $this->data;
 	}
 	public function selfdrivecar($carMake){
-		$sql="SELECT * FROM self_drive_car WHERE carMake='".$carMake->getCarMake()."' ";
+		$sql="SELECT  sdc.carMake,sdc.hourlyWeekday,sdc.hourlyWeekend,sdc.dailyWeekday,sdc.dailyWeekend,sdc.extraPerKm,sdc.deposit,sp.serviceProviderName
+                FROM self_drive_car sdc
+                INNER JOIN service_provider sp
+                ON sdc.serviceProviderType=sp.type
+                WHERE carMake='".$carMake->getCarMake()."' ";
+                
 		try{
 			$select=mysqli_query($this->con,$sql);
 			$this->data=array();

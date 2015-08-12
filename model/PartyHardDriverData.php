@@ -78,11 +78,20 @@ class PartyHardDriverData
         return $returnShowPHDDetails;
     }
     
-    public function deletePartyHardDriverRow($mobileno) {
+    public function deletePartyHardDriverRow($mobileno, $imageName) {
         $deletePHDRowDAO = new PartyHardDriverDataDAO();
         $this->setMobileNo($mobileno);
+        $this->setTargetPathOfImage($imageName);
         $returnDeletePHDMessage = $deletePHDRowDAO->deletePHD($this);
         return $returnDeletePHDMessage;
+    }
+    
+    public function verifiedPartyHardDriverRow($mobileno, $isVerify) {
+        $verifyPHDRowDAO = new PartyHardDriverDataDAO();
+        $this->setMobileNo($mobileno);
+        $this->setIsVerify($isVerify);
+        $returnVerifyPHDMessage = $verifyPHDRowDAO->verifyPHD($this);
+        return $returnVerifyPHDMessage;
     }
 }
 ?>

@@ -72,7 +72,26 @@ class DealsDataDAO
         try{
             $delete=mysqli_query($this->con,$query);
             if($delete){
-                $this->data = array("result" => 1, "message" => "Successfully user deleted!");
+                $this->data = array("result" => 1, "message" => "Successfully deal deleted!");
+                if($dealsRow->getTargetPathOfImage()!=="default_image.png") {
+                    unlink($dealsRow->getTargetPathOfImage());
+                }
+            } else {
+                $this->data = array("result" => 0, "message" => "Error!");
+            }
+        } catch(Exception $e) {
+            echo 'SQL Exception: ' .$e->getMessage();
+        }
+        return $this->data;
+    }
+    
+    public function verifyDeals($dealsIsVerify) {
+        $query="UPDATE deals SET isVerify = '".$dealsIsVerify->getIsVerify()."' WHERE offerCode = '".$dealsIsVerify->getOfferCode()."'";
+        
+        try{
+            $delete=mysqli_query($this->con,$query);
+            if($delete){
+                $this->data = array("result" => 1, "message" => "Successfully deal verified!");
             } else {
                 $this->data = array("result" => 0, "message" => "Error!");
             }

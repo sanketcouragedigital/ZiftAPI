@@ -68,7 +68,26 @@ class PartyHardDriverDataDAO
         try{
             $delete=mysqli_query($this->con,$query);
             if($delete){
-                $this->data = array("result" => 1, "message" => "Successfully user deleted!");
+                $this->data = array("result" => 1, "message" => "Successfully service deleted!");
+                if($phdRow->getTargetPathOfImage()!=="default_image.png") {
+                    unlink($phdRow->getTargetPathOfImage());
+                }
+            } else {
+                $this->data = array("result" => 0, "message" => "Error!");
+            }
+        } catch(Exception $e) {
+            echo 'SQL Exception: ' .$e->getMessage();
+        }
+        return $this->data;
+    }
+    
+    public function verifyPHD($phdIsVerify) {
+        $query="UPDATE phd_details SET isVerify = '".$phdIsVerify->getIsVerify()."' WHERE mobileno = '".$phdIsVerify->getMobileNo()."'";
+        
+        try{
+            $delete=mysqli_query($this->con,$query);
+            if($delete){
+                $this->data = array("result" => 1, "message" => "Successfully service verified!");
             } else {
                 $this->data = array("result" => 0, "message" => "Error!");
             }

@@ -217,7 +217,8 @@ if (isset($_POST['method'])) {
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $callFunctionDeletePHD = new PartyHardDriverData();
         $mobileno = stripslashes($_POST['mobileno']);
-        $response['deleteResponsePHD'] = $callFunctionDeletePHD -> deletePartyHardDriverRow($mobileno);
+        $imageName = stripslashes($_POST['imageName']);
+        $response['deleteResponsePHD'] = $callFunctionDeletePHD -> deletePartyHardDriverRow($mobileno, $imageName);
         deliver_response($_POST['format'], $response, false);
     }
     if (strcasecmp($_POST['method'], 'deleteDeals') == 0) {
@@ -225,7 +226,26 @@ if (isset($_POST['method'])) {
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $callFunctionDeleteDeals = new DealsData();
         $offerCode = stripslashes($_POST['offerCode']);
-        $response['deleteResponseDeals'] = $callFunctionDeleteDeals -> deleteDealsRow($offerCode);
+        $imageName = stripslashes($_POST['imageName']);
+        $response['deleteResponseDeals'] = $callFunctionDeleteDeals -> deleteDealsRow($offerCode, $imageName);
+        deliver_response($_POST['format'], $response, false);
+    }
+    if (strcasecmp($_POST['method'], 'verifyPHD') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $callFunctionVerifyPHD = new PartyHardDriverData();
+        $mobileno = stripslashes($_POST['mobileno']);
+        $isVerify = stripslashes($_POST['isVerify']);
+        $response['verifyResponsePHD'] = $callFunctionVerifyPHD -> verifiedPartyHardDriverRow($mobileno, $isVerify);
+        deliver_response($_POST['format'], $response, false);
+    }
+    if (strcasecmp($_POST['method'], 'verifyDeals') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $callFunctionVerifyDeals = new DealsData();
+        $offerCode = stripslashes($_POST['offerCode']);
+        $isVerify = stripslashes($_POST['isVerify']);
+        $response['verifyResponseDeals'] = $callFunctionVerifyDeals -> verifiedDealsRow($offerCode, $isVerify);
         deliver_response($_POST['format'], $response, false);
     }
     if(strcasecmp($_POST['method'],'selfdrivecar')==0){

@@ -98,11 +98,20 @@ class DealsData
         return $returnShowDealsDetails;
     }
     
-    public function deleteDealsRow($offerCode) {
+    public function deleteDealsRow($offerCode, $imageName) {
         $deleteDealsRowDAO = new DealsDataDAO();
         $this->setOfferCode($offerCode);
+        $this->setTargetPathOfImage($imageName);
         $returnDeleteDealsMessage = $deleteDealsRowDAO->deleteDeals($this);
         return $returnDeleteDealsMessage;
+    }
+    
+    public function verifiedDealsRow($offerCode, $isVerify) {
+        $verifyDealsRowDAO = new DealsDataDAO();
+        $this->setOfferCode($offerCode);
+        $this->setIsVerify($isVerify);
+        $returnVerifyDealsMessage = $verifyDealsRowDAO->verifyDeals($this);
+        return $returnVerifyDealsMessage;
     }
 }
 ?>
