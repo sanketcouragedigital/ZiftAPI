@@ -17,8 +17,8 @@ class PartyHardDriverDataDAO
     public function savePHD($PHDDetails) {
         try{
             if($PHDDetails->getLogoTemporaryName()=="") {
-                $query="INSERT INTO phd_details(serviceName, mobileno, city, isVerify)VALUES
-                ('".$PHDDetails->getServiceName()."','".$PHDDetails->getMobileNo()."','".$PHDDetails->getCity()."','".$PHDDetails->getIsVerify()."')";
+                $query="INSERT INTO phd_details(serviceName, mobileno, city, isVerify, date)VALUES
+                ('".$PHDDetails->getServiceName()."','".$PHDDetails->getMobileNo()."','".$PHDDetails->getCity()."','".$PHDDetails->getIsVerify()."', UTC_TIMESTAMP())";
                 $isInserted = mysqli_query($this->con, $query);
                 if ($isInserted) {
                     $this->data = "PHD_DETAILS_SAVED";
@@ -28,8 +28,8 @@ class PartyHardDriverDataDAO
             }
             else if($PHDDetails->getLogoTemporaryName()!=="") { 
                 if(move_uploaded_file($PHDDetails->getLogoTemporaryName(), $PHDDetails->getTargetPathOfImage())) {
-                    $query="INSERT INTO phd_details(image_path, serviceName, mobileno, city, isVerify)VALUES
-                    ('".$PHDDetails->getTargetPathOfImage()."','".$PHDDetails->getServiceName()."','".$PHDDetails->getMobileNo()."','".$PHDDetails->getCity()."','".$PHDDetails->getIsVerify()."')";
+                    $query="INSERT INTO phd_details(image_path, serviceName, mobileno, city, isVerify, date)VALUES
+                    ('".$PHDDetails->getTargetPathOfImage()."','".$PHDDetails->getServiceName()."','".$PHDDetails->getMobileNo()."','".$PHDDetails->getCity()."','".$PHDDetails->getIsVerify()."', UTC_TIMESTAMP())";
                     $isInserted = mysqli_query($this->con, $query);
                     if ($isInserted) {
                         $this->data = "PHD_DETAILS_SAVED";
@@ -48,7 +48,7 @@ class PartyHardDriverDataDAO
     }
 
     public function showPHD() {
-        $sql = "SELECT * FROM phd_details";
+        $sql = "SELECT * FROM phd_details ORDER BY date DESC";
         
         try {
             $select = mysqli_query($this->con,$sql);

@@ -19,8 +19,8 @@ class DealsDataDAO
         try {
             if($deals->getLogoTemporaryName()=="") {
                 $validUptoDate =  DateTime::createFromFormat('d/m/Y', $deals->getValidUptoDate())->format('Y-m-d');
-                $sql = "INSERT INTO deals(companyName,offer,offerCode,validUptoDate,offerTerms,isVerify)VALUES
-                ('".$deals->getCompanyName()."', '".$deals->getOffer()."', '".$deals->getOfferCode()."', '".$validUptoDate."', '".$deals->getOfferTerms()."', '".$deals->getIsVerify()."')";
+                $sql = "INSERT INTO deals(companyName,offer,offerCode,validUptoDate,offerTerms,isVerify,date)VALUES
+                ('".$deals->getCompanyName()."', '".$deals->getOffer()."', '".$deals->getOfferCode()."', '".$validUptoDate."', '".$deals->getOfferTerms()."', '".$deals->getIsVerify()."', UTC_TIMESTAMP())";
         
                 $isInserted = mysqli_query($this->con,$sql);
                 if ($isInserted) {
@@ -32,8 +32,8 @@ class DealsDataDAO
             else if($deals->getLogoTemporaryName()!=="") {
             if(move_uploaded_file($deals->getLogoTemporaryName(), $deals->getTargetPathOfImage())) {
                 $validUptoDate =  DateTime::createFromFormat('d/m/Y', $deals->getValidUptoDate())->format('Y-m-d');
-                $sql = "INSERT INTO deals(image_path,companyName,offer,offerCode,validUptoDate,offerTerms,isVerify)VALUES
-                ('".$deals->getTargetPathOfImage()."', '".$deals->getCompanyName()."', '".$deals->getOffer()."', '".$deals->getOfferCode()."', '".$validUptoDate."', '".$deals->getOfferTerms()."', '".$deals->getIsVerify()."')";
+                $sql = "INSERT INTO deals(image_path,companyName,offer,offerCode,validUptoDate,offerTerms,isVerify,date)VALUES
+                ('".$deals->getTargetPathOfImage()."', '".$deals->getCompanyName()."', '".$deals->getOffer()."', '".$deals->getOfferCode()."', '".$validUptoDate."', '".$deals->getOfferTerms()."', '".$deals->getIsVerify()."', UTC_TIMESTAMP())";
         
                 $isInserted = mysqli_query($this->con,$sql);
                 if ($isInserted) {
@@ -52,7 +52,7 @@ class DealsDataDAO
     }
     
     public function showDeals() {
-        $sql = "SELECT * FROM deals";
+        $sql = "SELECT * FROM deals ORDER BY date DESC";
         
         try {
             $select = mysqli_query($this->con,$sql);
