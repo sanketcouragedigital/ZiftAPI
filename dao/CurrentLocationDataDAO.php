@@ -204,5 +204,20 @@ class CurrentLocationDataDAO
         }
         return $this->data;
     }
+	
+	public function loadCars($cars){
+		$sql="SELECT carMake FROM self_drive_car WHERE carType='".$cars->getSelectedTypeOfCar()."' ";
+		try{
+			$select= mysqli_query($this->con,$sql);
+			$this->data=array();
+			while($rowdata=mysqli_fetch_assoc($select)){
+				$this->data[]=$rowdata;			
+			}
+		}
+		catch (Exception $e){
+			echo'SQL Exception:'.$e->getMessage();
+		}
+		return $this->data;
+	}
 }
 ?>

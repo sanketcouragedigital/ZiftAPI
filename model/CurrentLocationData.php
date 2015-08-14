@@ -21,6 +21,7 @@ class CurrentLocationData
     private $offerCode;
     private $validUptoDate;
     private $offerTerms;
+	private $selectedTypeOfCar;
     
     public function setMobileNo($mobileno) {
         $this->mobileno = $mobileno;
@@ -165,6 +166,13 @@ class CurrentLocationData
     public function getOfferTerms() {
         return $this->offerTerms;
     }
+	
+	public function setSelectedTypeOfCar($selectedTypeOfCar){
+		$this -> selectedTypeOfCar=$selectedTypeOfCar;
+	}
+	public function getSelectedTypeOfCar(){
+		return $this->selectedTypeOfCar;
+	}
     
     public function mapIncomingParams($mobileno,$latitude,$longitude,$area) {
         $this->setMobileNo($mobileno);
@@ -271,5 +279,12 @@ class CurrentLocationData
         $returnShowDealsDetails = $showDealsDataDAO->showDeals($this);
         return $returnShowDealsDetails;
     }
+	
+	public function loadCarsDetails($selectedTypeOfCar){
+		$this ->setSelectedTypeOfCar($selectedTypeOfCar);
+		$LoadCarsDetailsDAO = new CurrentLocationDataDAO();
+        $returnLoadCarsSuccessMessage = $LoadCarsDetailsDAO->loadCars($this);
+        return $returnLoadCarsSuccessMessage;
+	}
 }          
 ?>

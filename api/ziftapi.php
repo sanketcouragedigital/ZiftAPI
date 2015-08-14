@@ -1,5 +1,6 @@
 <?php
 require_once '../model/CurrentLocationData.php';
+require_once '../model/CarLoadData.php';
 
 function deliver_response($format, $api_response, $isSaveQuery) {
 
@@ -186,6 +187,15 @@ if (isset($_POST['method'])) {
         $response['responseDeals'] = $objDeals -> saveDealsDetails();
         deliver_response($_POST['format'], $response, true);
     }
+	if(strcasecmp($_POST['method'],'selfdrivecar')==0){
+		$response['code']=1;
+		$response['status']=$api_response_code[$response['code']]['HTTP Response'];
+		$objSelfdrivecar=new CarLoadData();
+		$carMake=stripslashes($_POST['carMake']);
+		$objSelfdrivecar->mapIncomingSelfdrivecarParams($carMake);
+		$response['responseSelfdrivecar']=$objSelfdrivecar->saveSelfdrivecarDetails();
+		deliver_response($_POST['format'],$response,true);
+	}
 }
 else if (isset($_GET['method'])) {
     if(strcasecmp($_GET['method'], 'nearme') == 0) {
@@ -212,5 +222,13 @@ else if (isset($_GET['method'])) {
         $response['showDealsList'] = $fetchDeals -> showDealsDetails();
         deliver_response($_GET['format'], $response, false);
     }
+	if(strcasecmp($_GET['method'],'loadCars')==0){
+		$response['code']=1;
+		$response['status']=$api_response_code[$response['code']]['HTTP Response'];
+		$fetchCars=new CarLoadData();
+		$selectedTypeOfCar=$_GET['selectedTypeOfCar'];
+		$response['loadCarsList']=$fetchCars -> loadCarsDetails($selectedTypeOfCar);
+		deliver_response($_GET['format'],$response,false);
+	}
 }
 ?>
