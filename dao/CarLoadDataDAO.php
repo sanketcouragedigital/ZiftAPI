@@ -29,7 +29,7 @@ class CarLoadDataDAO
 		return $this->data;
 	}
 	public function selfdrivecar($carMake){
-		$sql="SELECT  sdc.carMake,sdc.hourlyWeekdayRate,sdc.hourlyWeekendRate,sdc.dailyWeekdayRate,sdc.dailyWeekendRate,sdc.extraChargePerKm,sdc.deposit,sp.serviceProviderName,sp.serviceByHourly
+		$sql="SELECT  sdc.carMake,sdc.hourlyWeekdayRate,sdc.hourlyWeekendRate,sdc.dailyWeekdayRate,sdc.dailyWeekendRate,sdc.weeklyRate,sdc.monthlyRate,sdc.extraChargePerKm,sdc.deposit,sdc.city,sp.serviceProviderName,sp.serviceByHourly
 				FROM self_drive_car sdc
 				INNER JOIN service_provider sp
 				ON sdc.serviceProviderType=sp.type
