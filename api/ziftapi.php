@@ -7,6 +7,7 @@ require_once '../model/PartyHardDriverData.php';
 require_once '../model/DealsData.php';
 require_once '../model/CarLoadData.php';
 
+
 function deliver_response($format, $api_response, $isSaveQuery) {
 
     // Define HTTP responses
@@ -298,5 +299,12 @@ else if (isset($_GET['method'])) {
         $response['loadCarsList']=$fetchCars -> loadCarsDetails($selectedTypeOfCar);
         deliver_response($_GET['format'],$response,false);
     }
+	if (strcasecmp($_GET['method'],'loadCity')==0){
+		$response['code']==1;
+		$response['status']=$api_response_code[$response['code']]['HTTP Response'];
+		$fetchCity=new CarLoadData();
+		$response['loadCityList']=$fetchCity -> loadCity();
+		deliver_response($_GET['format'], $response,false);
+	}
 }
 ?>
