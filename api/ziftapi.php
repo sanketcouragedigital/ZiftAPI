@@ -324,7 +324,8 @@ else if (isset($_GET['method'])) {
         $response['status']=$api_response_code[$response['code']]['HTTP Response'];
         $fetchCars=new CarLoadData();
         $selectedTypeOfCar=$_GET['selectedTypeOfCar'];
-        $response['loadCarsList']=$fetchCars -> loadCarsDetails($selectedTypeOfCar);
+		$selectedCity=$_GET['selectedCity'];
+        $response['loadCarsList']=$fetchCars -> loadCarsDetails($selectedTypeOfCar,$selectedCity);
         deliver_response($_GET['format'],$response,false);
     }
     if (strcasecmp($_GET['method'], 'showServiceProvider') == 0) {
@@ -335,7 +336,7 @@ else if (isset($_GET['method'])) {
         deliver_response($_GET['format'], $response, false);
     }
 	if (strcasecmp($_GET['method'],'loadCity')==0){
-		$response['code']==1;
+		$response['code']=1;
 		$response['status']=$api_response_code[$response['code']]['HTTP Response'];
 		$fetchCity=new CarLoadData();
 		$response['loadCityList']=$fetchCity -> loadCity();

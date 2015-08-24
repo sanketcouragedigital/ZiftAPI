@@ -15,7 +15,7 @@ class CarLoadDataDAO
     }
 	
 	public function loadCars($cars){
-        $sql="SELECT DISTINCT carMake FROM self_drive_car WHERE carType='".$cars->getSelectedTypeOfCar()."' ";
+        $sql="SELECT DISTINCT carMake FROM self_drive_car WHERE carType='".$cars->getSelectedTypeOfCar()."' AND city='".$cars->getSelectedCity()."' ";
         try{
             $select= mysqli_query($this->con,$sql);
             $this->data=array();

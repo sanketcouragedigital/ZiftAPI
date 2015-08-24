@@ -9,6 +9,7 @@ class CarLoadData
     private $serviceProviderName;
     private $serviceProviderType;
     private $serviceByHourly;
+	private $selectedCity;
 	
 	public function setSelectedTypeOfCar($selectedTypeOfCar) {
 		$this -> selectedTypeOfCar=$selectedTypeOfCar;
@@ -17,6 +18,14 @@ class CarLoadData
 	public function getSelectedTypeOfCar() {
 		return $this->selectedTypeOfCar;
 	}
+	public function setSelectedCity($selectedCity) {
+		$this -> selectedCity=$selectedCity;
+	}
+    
+	public function getSelectedCity() {
+		return $this->selectedCity;
+	}
+	
     
 	public function setCarMake($carMake) {
 		$this->carMake=$carMake;
@@ -66,8 +75,9 @@ class CarLoadData
         return $this->serviceByHourly;
     }
 	
-	public function loadCarsDetails($selectedTypeOfCar) {
+	public function loadCarsDetails($selectedTypeOfCar, $selectedCity) {
 		$this ->setSelectedTypeOfCar($selectedTypeOfCar);
+		$this ->setSelectedCity($selectedCity);
 		$LoadCarsDetailsDAO = new CarLoadDataDAO();
         $returnLoadCarsSuccessMessage = $LoadCarsDetailsDAO->loadCars($this);
         return $returnLoadCarsSuccessMessage;
