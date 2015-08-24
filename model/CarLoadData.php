@@ -34,5 +34,10 @@ class CarLoadData
         $returnSelfdrivecarSuccessMessage = $SelfdrivecarDetailsDAO->selfdrivecar($this);
         return $returnSelfdrivecarSuccessMessage;
 	}
+	public function loadCity(){
+		$LoadCarsDetailsDAO=new CarLoadDataDAO();
+		$returnLoadCitySuccessMessage =$LoadCarsDetailsDAO -> loadCity();
+		return $returnLoadCitySuccessMessage;
+	}
 }          
 ?>
