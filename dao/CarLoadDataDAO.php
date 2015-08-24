@@ -46,5 +46,19 @@ class CarLoadDataDAO
 		}
 		return $this->data;
 	}
+	public function loadCity(){
+		$sql="SELECT DISTINCT city FROM self_drive_car";
+		try{
+			$select= mysqli_query($this->con,$sql);
+			$this->data=array();
+			while($rowdata=mysqli_fetch_assoc($select)){
+				$this->data[]=$rowdata;			
+			}
+		}
+		catch (Exception $e){
+			echo'SQL Exception:'.$e->getMessage();
+		}
+		return $this->data;
+	}
 }
 ?>
