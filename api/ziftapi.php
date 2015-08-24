@@ -254,10 +254,38 @@ if (isset($_POST['method'])) {
         $response['status']=$api_response_code[$response['code']]['HTTP Response'];
         $objSelfdrivecar=new CarLoadData();
         $carMake=stripslashes($_POST['carMake']);
-        $objSelfdrivecar->mapIncomingSelfdrivecarParams($carMake);
-        $response['responseSelfdrivecar']=$objSelfdrivecar->saveSelfdrivecarDetails();
+        $response['responseSelfdrivecar']=$objSelfdrivecar->saveSelfdrivecarDetails($carMake);
         deliver_response($_POST['format'],$response,true);
     }
+    if(strcasecmp($_POST['method'],'serviceprovider')==0){
+        $response['code']=1;
+        $response['status']=$api_response_code[$response['code']]['HTTP Response'];
+        $objServiceProviderCar=new CarLoadData();
+        $logo_tmp = "";
+        $target_path = "";
+        $serviceProviderName=stripslashes($_POST['serviceProviderName']);
+        $serviceProviderType=stripslashes($_POST['serviceProviderType']);
+        $serviceByHourly=stripslashes($_POST['serviceByHourly']);
+        if(isset($_FILES['logo'])){
+            $logo_tmp = $_FILES['logo']['tmp_name'];
+            $logo_name = $_FILES['logo']['name'];
+            $imgtype = $_FILES['logo']['type'];
+            $target_path = "../service_provider_images/".$logo_name;
+        }
+        $objServiceProviderCar->mapIncomingServiceProviderParams($logo_tmp, $target_path, $serviceProviderName, $serviceProviderType, $serviceByHourly);
+        $response['responseServiceProvider']=$objServiceProviderCar->saveServiceProvider();
+        deliver_response($_POST['format'],$response,true);
+    }
+    if (strcasecmp($_POST['method'], 'deleteServiceProvider') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $callFunctionDeleteServiceProvider = new CarLoadData();
+        $serviceProviderName = stripslashes($_POST['serviceProviderName']);
+        $imageName = stripslashes($_POST['imageName']);
+        $response['deleteResponsePHD'] = $callFunctionDeleteServiceProvider -> deleteServiceProviderByServiceProviderName($serviceProviderName, $imageName);
+        deliver_response($_POST['format'], $response, false);
+    }
+    
 }
 else if (isset($_GET['method'])) {
     if(strcasecmp($_GET['method'], 'nearme') == 0) {
@@ -298,6 +326,13 @@ else if (isset($_GET['method'])) {
         $selectedTypeOfCar=$_GET['selectedTypeOfCar'];
         $response['loadCarsList']=$fetchCars -> loadCarsDetails($selectedTypeOfCar);
         deliver_response($_GET['format'],$response,false);
+    }
+    if (strcasecmp($_GET['method'], 'showServiceProvider') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $fetchServiceProvider = new CarLoadData();
+        $response['showServiceProviderList'] = $fetchServiceProvider -> showServiceProvider();
+        deliver_response($_GET['format'], $response, false);
     }
 	if (strcasecmp($_GET['method'],'loadCity')==0){
 		$response['code']==1;
