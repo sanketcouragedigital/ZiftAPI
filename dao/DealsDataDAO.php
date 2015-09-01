@@ -18,7 +18,10 @@ class DealsDataDAO
         //include_once ('db_config.php');
         try {
             if($deals->getLogoTemporaryName()=="") {
-                $validUptoDate =  DateTime::createFromFormat('d/m/Y', $deals->getValidUptoDate())->format('Y-m-d');
+                $validUptoDate = "";
+                if($deals->getValidUptoDate()!=="") {
+                    $validUptoDate =  DateTime::createFromFormat('d/m/Y', $deals->getValidUptoDate())->format('Y-m-d');
+                }
                 $sql = "INSERT INTO deals(companyName,offer,offerCode,validUptoDate,offerTerms,isVerify,date)VALUES
                 ('".$deals->getCompanyName()."', '".$deals->getOffer()."', '".$deals->getOfferCode()."', '".$validUptoDate."', '".$deals->getOfferTerms()."', '".$deals->getIsVerify()."', UTC_TIMESTAMP())";
         
@@ -31,7 +34,10 @@ class DealsDataDAO
             }
             else if($deals->getLogoTemporaryName()!=="") {
             if(move_uploaded_file($deals->getLogoTemporaryName(), $deals->getTargetPathOfImage())) {
-                $validUptoDate =  DateTime::createFromFormat('d/m/Y', $deals->getValidUptoDate())->format('Y-m-d');
+                $validUptoDate = "";
+                if($deals->getValidUptoDate()!=="") {
+                    $validUptoDate =  DateTime::createFromFormat('d/m/Y', $deals->getValidUptoDate())->format('Y-m-d');
+                }
                 $sql = "INSERT INTO deals(image_path,companyName,offer,offerCode,validUptoDate,offerTerms,isVerify,date)VALUES
                 ('".$deals->getTargetPathOfImage()."', '".$deals->getCompanyName()."', '".$deals->getOffer()."', '".$deals->getOfferCode()."', '".$validUptoDate."', '".$deals->getOfferTerms()."', '".$deals->getIsVerify()."', UTC_TIMESTAMP())";
         
