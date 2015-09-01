@@ -119,6 +119,13 @@ function GetImageExtension($imagetype) {
     }
 }
 
+function ConvertStringEntityToUnicode($string) {
+    $removeApostropheString = str_replace("'", "&#39;", $string);
+    $removeBackSlashString = str_replace("\\", "&#92;", $removeApostropheString);
+    $removeUnderscoreString = str_replace("_", "&#95;", $removeBackSlashString);
+    return $removeUnderscoreString;
+}
+
 // --- Step 3: Process Request
 
 // Switch based on incoming method
@@ -129,10 +136,10 @@ if (isset($_POST['method'])) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $location = new CurrentLocationData();
-        $mobileno = stripslashes($_POST['mobileno']);
-        $latitude = stripslashes($_POST['latitude']);
-        $longitude = stripslashes($_POST['longitude']);
-        $area = stripslashes($_POST['area']);
+        $mobileno = $_POST['mobileno'];
+        $latitude = $_POST['latitude'];
+        $longitude = $_POST['longitude'];
+        $area = ConvertStringEntityToUnicode($_POST['area']);
         $location->mapIncomingLocationParams($mobileno, $latitude, $longitude, $area);
         $response['forHireData'] = $location -> locationData();
         deliver_response($_POST['format'], $response, true);
@@ -141,7 +148,7 @@ if (isset($_POST['method'])) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $delete = new CurrentLocationData();
-        $mobileno = stripslashes($_POST['mobileno']);
+        $mobileno = $_POST['mobileno'];
         $response['deleteEntry'] = $delete -> deleteLocationEntry($mobileno);
         deliver_response($_POST['format'], $response, false);
     }
@@ -149,9 +156,9 @@ if (isset($_POST['method'])) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $review = new UserReviewData();
-        $serviceName = stripslashes($_POST['serviceName']);
-        $ratingNumber = stripslashes($_POST['ratingNumber']);
-        $comment = stripslashes($_POST['comment']);     
+        $serviceName = $_POST['serviceName'];
+        $ratingNumber = $_POST['ratingNumber'];
+        $comment = ConvertStringEntityToUnicode($_POST['comment']);   
         $review->mapIncomingReviewParams($serviceName, $ratingNumber, $comment);
         $response['reviewdata'] = $review -> saveReview();
         deliver_response($_POST['format'], $response, true);
@@ -160,9 +167,9 @@ if (isset($_POST['method'])) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $objFeedback = new UserFeedbackData();
-        $mobileno = stripslashes($_POST['mobileno']);
-        $email = stripslashes($_POST['email']);
-        $feedback = stripslashes($_POST['feedback']);
+        $mobileno = $_POST['mobileno'];
+        $email = $_POST['email'];
+        $feedback = ConvertStringEntityToUnicode($_POST['feedback']);
         $objFeedback->mapIncomingFeedbackParams($mobileno, $email, $feedback);
         $response['mailFeedback'] = $objFeedback -> sendFeedbackEmailToAdmin();
         deliver_response($_POST['format'], $response, true);
@@ -173,10 +180,10 @@ if (isset($_POST['method'])) {
         $objPHD = new PartyHardDriverData();
         $logo_tmp = "";
         $target_path = "";
-        $serviceName = stripslashes($_POST['serviceName']);
-        $mobileno = stripslashes($_POST['mobileno']);
-        $city = stripslashes($_POST['city']);
-        $isVerify = stripslashes($_POST['isVerify']);
+        $serviceName = ConvertStringEntityToUnicode($_POST['serviceName']);
+        $mobileno = $_POST['mobileno'];
+        $city = ConvertStringEntityToUnicode($_POST['city']);
+        $isVerify = $_POST['isVerify'];
         if(isset($_FILES['logo'])){
             $logo_tmp = $_FILES['logo']['tmp_name'];
             $logo_name = $_FILES['logo']['name'];
@@ -195,11 +202,11 @@ if (isset($_POST['method'])) {
         $objDeals = new DealsData();
         $logo_tmp = "";
         $target_path = "";
-        $companyName = stripslashes($_POST['companyName']);
-        $offer = stripslashes($_POST['offer']);
+        $companyName = ConvertStringEntityToUnicode($_POST['companyName']);
+        $offer = ConvertStringEntityToUnicode($_POST['offer']);
         $offerCode = stripslashes($_POST['offerCode']);
         $validUptoDate = stripslashes($_POST['validUptoDate']);
-        $offerTerms = stripslashes($_POST['offerTerms']);
+        $offerTerms = ConvertStringEntityToUnicode($_POST['offerTerms']);
         $isVerify = stripslashes($_POST['isVerify']);
         if(isset($_FILES['logo'])){
             $logo_tmp = $_FILES['logo']['tmp_name'];
@@ -217,8 +224,8 @@ if (isset($_POST['method'])) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $callFunctionDeletePHD = new PartyHardDriverData();
-        $mobileno = stripslashes($_POST['mobileno']);
-        $imageName = stripslashes($_POST['imageName']);
+        $mobileno = $_POST['mobileno'];
+        $imageName = $_POST['imageName'];
         $response['deleteResponsePHD'] = $callFunctionDeletePHD -> deletePartyHardDriverRow($mobileno, $imageName);
         deliver_response($_POST['format'], $response, false);
     }
@@ -226,8 +233,8 @@ if (isset($_POST['method'])) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $callFunctionDeleteDeals = new DealsData();
-        $offerCode = stripslashes($_POST['offerCode']);
-        $imageName = stripslashes($_POST['imageName']);
+        $offerCode = $_POST['offerCode'];
+        $imageName = $_POST['imageName'];
         $response['deleteResponseDeals'] = $callFunctionDeleteDeals -> deleteDealsRow($offerCode, $imageName);
         deliver_response($_POST['format'], $response, false);
     }
@@ -235,8 +242,8 @@ if (isset($_POST['method'])) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $callFunctionVerifyPHD = new PartyHardDriverData();
-        $mobileno = stripslashes($_POST['mobileno']);
-        $isVerify = stripslashes($_POST['isVerify']);
+        $mobileno = $_POST['mobileno'];
+        $isVerify = $_POST['isVerify'];
         $response['verifyResponsePHD'] = $callFunctionVerifyPHD -> verifiedPartyHardDriverRow($mobileno, $isVerify);
         deliver_response($_POST['format'], $response, false);
     }
@@ -244,8 +251,8 @@ if (isset($_POST['method'])) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $callFunctionVerifyDeals = new DealsData();
-        $offerCode = stripslashes($_POST['offerCode']);
-        $isVerify = stripslashes($_POST['isVerify']);
+        $offerCode = $_POST['offerCode'];
+        $isVerify = $_POST['isVerify'];
         $response['verifyResponseDeals'] = $callFunctionVerifyDeals -> verifiedDealsRow($offerCode, $isVerify);
         deliver_response($_POST['format'], $response, false);
     }
@@ -253,7 +260,7 @@ if (isset($_POST['method'])) {
         $response['code']=1;
         $response['status']=$api_response_code[$response['code']]['HTTP Response'];
         $objSelfdrivecar=new CarLoadData();
-        $carMake=stripslashes($_POST['carMake']);
+        $carMake = $_POST['carMake'];
         $response['responseSelfdrivecar']=$objSelfdrivecar->saveSelfdrivecarDetails($carMake);
         deliver_response($_POST['format'],$response,true);
     }
@@ -263,9 +270,9 @@ if (isset($_POST['method'])) {
         $objServiceProviderCar=new CarLoadData();
         $logo_tmp = "";
         $target_path = "";
-        $serviceProviderName=stripslashes($_POST['serviceProviderName']);
-        $serviceProviderType=stripslashes($_POST['serviceProviderType']);
-        $serviceByHourly=stripslashes($_POST['serviceByHourly']);
+        $serviceProviderName = $_POST['serviceProviderName'];
+        $serviceProviderType = $_POST['serviceProviderType'];
+        $serviceByHourly = $_POST['serviceByHourly'];
         if(isset($_FILES['logo'])){
             $logo_tmp = $_FILES['logo']['tmp_name'];
             $logo_name = $_FILES['logo']['name'];
@@ -280,8 +287,8 @@ if (isset($_POST['method'])) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $callFunctionDeleteServiceProvider = new CarLoadData();
-        $serviceProviderName = stripslashes($_POST['serviceProviderName']);
-        $imageName = stripslashes($_POST['imageName']);
+        $serviceProviderName = $_POST['serviceProviderName'];
+        $imageName = $_POST['imageName'];
         $response['deleteResponsePHD'] = $callFunctionDeleteServiceProvider -> deleteServiceProviderByServiceProviderName($serviceProviderName, $imageName);
         deliver_response($_POST['format'], $response, false);
     }
@@ -292,8 +299,8 @@ else if (isset($_GET['method'])) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $nearDrivers = new NearestDriverData();
-        $userLatitude = stripslashes($_GET['userLatitude']);
-        $userLongitude = stripslashes($_GET['userLongitude']);
+        $userLatitude = $_GET['userLatitude'];
+        $userLongitude = $_GET['userLongitude'];
         $response['nearestDrivers'] = $nearDrivers->findNearestDrivers($userLatitude, $userLongitude);
         deliver_response($_GET['format'], $response, false);
     }
