@@ -6,6 +6,7 @@ require_once '../model/UserFeedbackData.php';
 require_once '../model/PartyHardDriverData.php';
 require_once '../model/DealsData.php';
 require_once '../model/CarLoadData.php';
+require_once '../model/OutStationCityLoad.php';
 
 
 function deliver_response($format, $api_response, $isSaveQuery) {
@@ -347,6 +348,13 @@ else if (isset($_GET['method'])) {
 		$response['status']=$api_response_code[$response['code']]['HTTP Response'];
 		$fetchCity=new CarLoadData();
 		$response['loadCityList']=$fetchCity -> loadCity();
+		deliver_response($_GET['format'], $response,false);
+	}
+	if (strcasecmp($_GET['method'],'outStationLoadCity')==0){
+		$response['code']=1;
+		$response['status']=$api_response_code[$response['code']]['HTTP Response'];
+		$fetchCity=new OutStationCityLoad();
+		$response['loadCityList']=$fetchCity -> outStationLoadCity();
 		deliver_response($_GET['format'], $response,false);
 	}
 }
