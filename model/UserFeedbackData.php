@@ -38,7 +38,7 @@ class UserFeedbackData
 
     public function sendFeedbackEmailToAdmin() {
         $emailSender = new FeedbackMail();
-        $emailSender->setTo("sanketdhotre@couragedigital.com");
+        $emailSender->setTo("tanveersure@ziftapp.com");
         $emailSender->setFrom($this->email);
         $emailSender->setMessage($this->createEmailMessageBodyForFeedback());
         $emailSender->setSubject("An Email from ".$this->mobileno.".");
