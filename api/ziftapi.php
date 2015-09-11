@@ -7,6 +7,7 @@ require_once '../model/PartyHardDriverData.php';
 require_once '../model/DealsData.php';
 require_once '../model/CarLoadData.php';
 require_once '../model/OutStationCityLoad.php';
+require_once '../model/ServicesOfCheapestRideAsPerCity.php';
 
 
 function deliver_response($format, $api_response, $isSaveQuery) {
@@ -293,6 +294,7 @@ if (isset($_POST['method'])) {
         $response['deleteResponsePHD'] = $callFunctionDeleteServiceProvider -> deleteServiceProviderByServiceProviderName($serviceProviderName, $imageName);
         deliver_response($_POST['format'], $response, false);
     }
+	   
     
 }
 else if (isset($_GET['method'])) {
@@ -357,5 +359,13 @@ else if (isset($_GET['method'])) {
 		$response['loadCityList']=$fetchCity -> outStationLoadCity();
 		deliver_response($_GET['format'], $response,false);
 	}
+	if(strcasecmp($_GET['method'],'CheapestRideAsPerCity')==0){
+        $response['code']=1;
+        $response['status']=$api_response_code[$response['code']]['HTTP Response'];
+        $objCheapestRideAsPerCity=new ServicesOfCheapestRideAsPerCity();
+        $City = $_GET['City'];
+        $response['responseCheapestRideAsPerCity']=$objCheapestRideAsPerCity->showCheapestRideAsPerCity($City);
+        deliver_response($_GET['format'],$response,true);
+    }
 }
 ?>
