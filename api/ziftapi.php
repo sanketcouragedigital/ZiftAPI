@@ -8,6 +8,7 @@ require_once '../model/DealsData.php';
 require_once '../model/CarLoadData.php';
 require_once '../model/OutStationCityLoad.php';
 require_once '../model/ServicesOfCheapestRideAsPerCity.php';
+require_once '../model/TaxiContact.php';
 
 
 function deliver_response($format, $api_response, $isSaveQuery) {
@@ -366,6 +367,13 @@ else if (isset($_GET['method'])) {
         $City = $_GET['City'];
         $response['responseCheapestRideAsPerCity']=$objCheapestRideAsPerCity->showCheapestRideAsPerCity($City);
         deliver_response($_GET['format'],$response,true);
+    }
+	if (strcasecmp($_GET['method'], 'showTaxiContact') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $fetchTaxiContact = new TaxiContact();
+        $response['showTaxiContactList'] = $fetchTaxiContact -> showTaxiContact();
+        deliver_response($_GET['format'], $response, false);
     }
 }
 ?>
