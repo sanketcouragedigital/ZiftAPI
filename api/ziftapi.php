@@ -320,7 +320,8 @@ else if (isset($_GET['method'])) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $fetchPHD = new PartyHardDriverData();
-        $response['showPHDList'] = $fetchPHD -> showPHDDetails();
+		$City = $_GET['City'];
+        $response['showPHDList'] = $fetchPHD -> showPHDDetails($City);
         deliver_response($_GET['format'], $response, false);
     }
     if (strcasecmp($_GET['method'], 'showDeals') == 0) {
@@ -372,7 +373,8 @@ else if (isset($_GET['method'])) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $fetchTaxiContact = new TaxiContact();
-        $response['showTaxiContactList'] = $fetchTaxiContact -> showTaxiContact();
+		$City = $_GET['City'];
+        $response['showTaxiContactList'] = $fetchTaxiContact -> showTaxiContact($City);
         deliver_response($_GET['format'], $response, false);
     }
 }

@@ -72,8 +72,9 @@ class PartyHardDriverData
         return $returnPHDSuccessMessage;
     }
 	
-    public function showPHDDetails() {
+    public function showPHDDetails($City) {
         $showPHDDataDAO = new PartyHardDriverDataDAO();
+		$this->setCity($City);
         $returnShowPHDDetails = $showPHDDataDAO->showPHD($this);
         return $returnShowPHDDetails;
     }

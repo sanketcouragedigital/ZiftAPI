@@ -47,8 +47,10 @@ class PartyHardDriverDataDAO
         return $this->data;
     }
 
-    public function showPHD() {
-        $sql = "SELECT * FROM phd_details ORDER BY date DESC";
+    public function showPHD($City) {
+        $sql = "SELECT * FROM phd_details 
+				WHERE City='".$City->getCity()."'
+				ORDER BY date DESC";
         
         try {
             $select = mysqli_query($this->con,$sql);

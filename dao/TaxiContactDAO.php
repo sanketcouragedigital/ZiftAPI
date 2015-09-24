@@ -12,11 +12,13 @@ class TaxiContactDAO
         $baseDAO = new BaseDAO();
         $this->con = $baseDAO->getConnection();
     }
-     public function showTaxiContactDetails() {
-        $sql = "SELECT DISTINCT crc.Contact,crs.Owner,crs.logo
+	
+    public function showTaxiContactDetails($City) {
+        $sql = "SELECT DISTINCT crc.Contact,crc.City,crs.Owner,crs.logo
                 FROM cheapest_ride_citywise crc
                 INNER JOIN chipeast_ride_service crs
-                ON crc.Service_Type = crs.Service_Type";
+                ON crc.Service_Type = crs.Service_Type
+				WHERE City='".$City->getCity()."' ";
         
         try {
             $select = mysqli_query($this->con,$sql);
