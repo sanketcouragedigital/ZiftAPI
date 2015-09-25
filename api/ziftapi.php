@@ -9,6 +9,7 @@ require_once '../model/CarLoadData.php';
 require_once '../model/OutStationCityLoad.php';
 require_once '../model/ServicesOfCheapestRideAsPerCity.php';
 require_once '../model/TaxiContact.php';
+require_once '../model/TaxiServiceProvider.php';
 
 
 function deliver_response($format, $api_response, $isSaveQuery) {
@@ -295,8 +296,23 @@ if (isset($_POST['method'])) {
         $response['deleteResponsePHD'] = $callFunctionDeleteServiceProvider -> deleteServiceProviderByServiceProviderName($serviceProviderName, $imageName);
         deliver_response($_POST['format'], $response, false);
     }
-	   
-    
+    if(strcasecmp($_POST['method'],'taxiServiceType')==0){
+        $response['code']=1;
+        $response['status']=$api_response_code[$response['code']]['HTTP Response'];
+        $objTaxiServiceProvider=new TaxiServiceProvider();
+        $logo_tmp = "";
+        $target_path = "";
+        $owner = $_POST['owner'];
+        $serviceType = $_POST['serviceType'];
+        if(isset($_FILES['logo'])){
+            $logo_tmp = $_FILES['logo']['tmp_name'];
+            $logo_name = $_FILES['logo']['name'];
+            $target_path = "../taxiservices_images/".$logo_name;
+        }
+        $objTaxiServiceProvider->mapIncomingTaxiServiceProviderParams($logo_tmp, $target_path, $owner, $serviceType);
+        $response['responseTaxiServiceProvider']=$objTaxiServiceProvider->saveTaxiServiceProvider();
+        deliver_response($_POST['format'],$response,true);
+    }
 }
 else if (isset($_GET['method'])) {
     if(strcasecmp($_GET['method'], 'nearme') == 0) {
@@ -322,6 +338,13 @@ else if (isset($_GET['method'])) {
         $fetchPHD = new PartyHardDriverData();
 		$City = $_GET['City'];
         $response['showPHDList'] = $fetchPHD -> showPHDDetails($City);
+        deliver_response($_GET['format'], $response, false);
+    }
+    if (strcasecmp($_GET['method'], 'showAllCityPHDServices') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $fetchPHD = new PartyHardDriverData();
+        $response['showAllCityPHDList'] = $fetchPHD -> showAllCityPHDDetails();
         deliver_response($_GET['format'], $response, false);
     }
     if (strcasecmp($_GET['method'], 'showDeals') == 0) {

@@ -17,7 +17,7 @@ class ServicesOfCheapestRideAsPerCityDAO
 	public function ServicesOfCheapestRides($City){
         $sql="SELECT crc.City,crc.Service_Type,crc.Contact,crc.Day_Cost,crc.Night_Cost,crc.Day_perKM,crc.Night_perKM,crc.First_x_KM,crc.per_minute_rate,crc.Minimum_Rates,crs.logo
                 FROM cheapest_ride_citywise crc
-                INNER JOIN chipeast_ride_service crs
+                INNER JOIN cheapest_ride_service crs
                 ON crc.Service_Type = crs.Service_Type
                 WHERE City='".$City->getCity()."' ";
         try{

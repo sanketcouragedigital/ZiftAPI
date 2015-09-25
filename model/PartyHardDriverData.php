@@ -79,6 +79,12 @@ class PartyHardDriverData
         return $returnShowPHDDetails;
     }
     
+    public function showAllCityPHDDetails() {
+        $showAllCityPHDDataDAO = new PartyHardDriverDataDAO();
+        $returnShowAllCityPHDDetails = $showAllCityPHDDataDAO->showAllPHD($this);
+        return $returnShowAllCityPHDDetails;
+    }
+    
     public function deletePartyHardDriverRow($mobileno, $imageName) {
         $deletePHDRowDAO = new PartyHardDriverDataDAO();
         $this->setMobileNo($mobileno);

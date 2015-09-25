@@ -16,7 +16,7 @@ class TaxiContactDAO
     public function showTaxiContactDetails($City) {
         $sql = "SELECT DISTINCT crc.Contact,crc.City,crs.Owner,crs.logo
                 FROM cheapest_ride_citywise crc
-                INNER JOIN chipeast_ride_service crs
+                INNER JOIN cheapest_ride_service crs
                 ON crc.Service_Type = crs.Service_Type
 				WHERE City='".$City->getCity()."' ";
         

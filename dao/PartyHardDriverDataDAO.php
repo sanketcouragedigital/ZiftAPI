@@ -64,6 +64,22 @@ class PartyHardDriverDataDAO
         return $this->data;
     }
     
+    public function showAllPHD() {
+        $sql = "SELECT * FROM phd_details 
+                ORDER BY date DESC";
+        
+        try {
+            $select = mysqli_query($this->con,$sql);
+            $this->data=array();
+            while ($rowdata = mysqli_fetch_assoc($select)) {
+                $this->data[]=$rowdata;
+            }
+        } catch(Exception $e) {
+            echo 'SQL Exception: ' .$e->getMessage();
+        }
+        return $this->data;
+    }
+    
     public function deletePHD($phdRow) {
         $query="DELETE FROM phd_details WHERE mobileno = '".$phdRow->getMobileNo()."'";
         
