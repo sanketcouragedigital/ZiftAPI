@@ -10,7 +10,7 @@ require_once '../model/OutStationCityLoad.php';
 require_once '../model/ServicesOfCheapestRideAsPerCity.php';
 require_once '../model/TaxiContact.php';
 require_once '../model/TaxiServiceProvider.php';
-require_once '../model/TermsNConditions.php';
+
 
 function deliver_response($format, $api_response, $isSaveQuery) {
 
@@ -398,15 +398,6 @@ else if (isset($_GET['method'])) {
         $fetchTaxiContact = new TaxiContact();
 		$City = $_GET['City'];
         $response['showTaxiContactList'] = $fetchTaxiContact -> showTaxiContact($City);
-        deliver_response($_GET['format'], $response, false);
-    }
-	if (strcasecmp($_GET['method'], 'showTermsNCondition') == 0) {
-        $response['code'] = 1;
-        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
-        $fetchTermsNCondition = new TermsNConditions();
-		$City = $_GET['City'];
-		$Service_Type = $_GET['Service_Type'];
-        $response['showTaxiTermsNCondition'] = $fetchTermsNCondition -> showTermsNCondition($City,$Service_Type);
         deliver_response($_GET['format'], $response, false);
     }
 }
