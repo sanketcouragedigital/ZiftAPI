@@ -10,6 +10,7 @@ require_once '../model/OutStationCityLoad.php';
 require_once '../model/ServicesOfCheapestRideAsPerCity.php';
 require_once '../model/TaxiContact.php';
 require_once '../model/TaxiServiceProvider.php';
+require_once '../model/TaxiServicesInCity.php';
 
 
 function deliver_response($format, $api_response, $isSaveQuery) {
@@ -304,13 +305,36 @@ if (isset($_POST['method'])) {
         $target_path = "";
         $owner = $_POST['owner'];
         $serviceType = $_POST['serviceType'];
-        if(isset($_FILES['logo'])){
+        $fleet = $_POST['fleet'];
+        $appLink = $_POST['appLink'];
+        $termsAndConditions = $_POST['termsAndConditions'];
+        if(isset($_FILES['logo'])) {
             $logo_tmp = $_FILES['logo']['tmp_name'];
             $logo_name = $_FILES['logo']['name'];
             $target_path = "../taxiservices_images/".$logo_name;
         }
-        $objTaxiServiceProvider->mapIncomingTaxiServiceProviderParams($logo_tmp, $target_path, $owner, $serviceType);
+        $objTaxiServiceProvider->mapIncomingTaxiServiceProviderParams($logo_tmp, $target_path, $owner, $serviceType, $fleet, $appLink, $termsAndConditions);
         $response['responseTaxiServiceProvider']=$objTaxiServiceProvider->saveTaxiServiceProvider();
+        deliver_response($_POST['format'],$response,true);
+    }
+    if(strcasecmp($_POST['method'],'taxiServicesInCity')==0){
+        $response['code']=1;
+        $response['status']=$api_response_code[$response['code']]['HTTP Response'];
+        $objTaxiServicesInCity=new TaxiServicesInCity();
+        $city = $_POST['city'];
+        $contact = $_POST['contact'];
+        $serviceType = $_POST['serviceType'];
+        $firstXKM = $_POST['firstXKM'];
+        $dayCost = $_POST['dayCost'];
+        $nightCost = $_POST['nightCost'];
+        $dayCostPerKM = $_POST['dayCostPerKM'];
+        $nightCostPerKM = $_POST['nightCostPerKM'];
+        $perMinuteRate = $_POST['perMinuteRate'];
+        $dayWaitingCharges = $_POST['dayWaitingCharges'];
+        $nightWaitingCharges = $_POST['nightWaitingCharges'];
+        $minimumRatesOfTaxi = $_POST['minimumRatesOfTaxi'];
+        $objTaxiServicesInCity->mapIncomingTaxiServicesInCityParams($city, $contact, $serviceType, $firstXKM, $dayCost, $nightCost, $dayCostPerKM, $nightCostPerKM, $perMinuteRate, $dayWaitingCharges, $nightWaitingCharges, $minimumRatesOfTaxi);
+        $response['responseTaxiServiceInCity']=$objTaxiServicesInCity->saveTaxiServicesInCity();
         deliver_response($_POST['format'],$response,true);
     }
 }
@@ -370,21 +394,21 @@ else if (isset($_GET['method'])) {
         $response['showServiceProviderList'] = $fetchServiceProvider -> showServiceProvider();
         deliver_response($_GET['format'], $response, false);
     }
-	if (strcasecmp($_GET['method'],'loadCity')==0){
+	if (strcasecmp($_GET['method'],'loadCity')==0) {
 		$response['code']=1;
 		$response['status']=$api_response_code[$response['code']]['HTTP Response'];
 		$fetchCity=new CarLoadData();
 		$response['loadCityList']=$fetchCity -> loadCity();
 		deliver_response($_GET['format'], $response,false);
 	}
-	if (strcasecmp($_GET['method'],'outStationLoadCity')==0){
+	if (strcasecmp($_GET['method'],'outStationLoadCity')==0) {
 		$response['code']=1;
 		$response['status']=$api_response_code[$response['code']]['HTTP Response'];
 		$fetchCity=new OutStationCityLoad();
 		$response['loadCityList']=$fetchCity -> outStationLoadCity();
 		deliver_response($_GET['format'], $response,false);
 	}
-	if(strcasecmp($_GET['method'],'CheapestRideAsPerCity')==0){
+	if(strcasecmp($_GET['method'],'CheapestRideAsPerCity')==0) {
         $response['code']=1;
         $response['status']=$api_response_code[$response['code']]['HTTP Response'];
         $objCheapestRideAsPerCity=new ServicesOfCheapestRideAsPerCity();
@@ -399,6 +423,13 @@ else if (isset($_GET['method'])) {
 		$City = $_GET['City'];
         $response['showTaxiContactList'] = $fetchTaxiContact -> showTaxiContact($City);
         deliver_response($_GET['format'], $response, false);
+    }    
+    if (strcasecmp($_GET['method'],'loadTaxiServices') == 0) {
+        $response['code']=1;
+        $response['status']=$api_response_code[$response['code']]['HTTP Response'];
+        $fetchTaxiServices=new TaxiServiceProvider();
+        $response['loadTaxiServicesList']=$fetchTaxiServices -> loadTaxiServiceType();
+        deliver_response($_GET['format'], $response,false);
     }
 }
 ?>

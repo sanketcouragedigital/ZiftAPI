@@ -14,11 +14,17 @@ class TaxiServiceProviderDAO
         $this->con = $baseDAO->getConnection();
     }
             
-    public function showTaxiServiceDetails($TaxiServiceDetails) {
+    public function saveTaxiServiceDetails($TaxiServiceDetails) {
         try{
             if(move_uploaded_file($TaxiServiceDetails->getLogoTemporaryName(), $TaxiServiceDetails->getTargetPathOfImage())) {
-                $query="INSERT INTO cheapest_ride_service(Owner, Service_Type, logo)
-                    VALUES ('".$TaxiServiceDetails->getOwner()."','".$TaxiServiceDetails->getServiceType()."','".$TaxiServiceDetails->getTargetPathOfImage()."')";
+                $query="INSERT INTO cheapest_ride_service(Owner, Service_Type, logo, Fleet, app_link, Terms_n_Conditions)
+                    VALUES ('".$TaxiServiceDetails->getOwner()."',
+                    '".$TaxiServiceDetails->getServiceType()."',
+                    '".$TaxiServiceDetails->getTargetPathOfImage()."',
+                    '".$TaxiServiceDetails->getFleet()."',
+                    '".$TaxiServiceDetails->getAppLink()."',
+                    '".$TaxiServiceDetails->getTermsAndConditions()."'
+                    )";
                 $isInserted = mysqli_query($this->con, $query);
                 if ($isInserted) {
                     $this->data = "TAXI_SERVICE_SAVED";
@@ -31,6 +37,21 @@ class TaxiServiceProviderDAO
         }
         catch(Exception $e) {   
             echo 'SQL Exception: ' .$e->getMessage();
+        }
+        return $this->data;
+    }
+
+    public function showTaxiServiceTypes(){
+        $sql="SELECT * FROM cheapest_ride_service";
+        try{
+            $select= mysqli_query($this->con,$sql);
+            $this->data=array();
+            while($rowdata=mysqli_fetch_assoc($select)){
+                $this->data[]=$rowdata;         
+            }
+        }
+        catch (Exception $e){
+            echo'SQL Exception:'.$e->getMessage();
         }
         return $this->data;
     }

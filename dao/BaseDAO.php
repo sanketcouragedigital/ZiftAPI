@@ -2,9 +2,9 @@
 class BaseDAO {
     
     
-    private $db_host = 'localhost'; //hostname//localhost//103.21.59.166:3306
-    private $db_user = 'root'; // username//root//appcom_ziftuser
-    private $db_password = ''; // password//blank //zift2015!
+    private $db_host = '103.21.59.166:3306'; //hostname
+    private $db_user = 'appcom_ziftuser'; // username
+    private $db_password = 'zift2015!'; // password
     private $db_name = 'appcom_ziftapp'; //database name
     private $con = null;
     

@@ -6,6 +6,9 @@ class TaxiServiceProvider
     private $target_path;
     private $owner;
     private $serviceType;
+    private $fleet;
+    private $appLink;
+    private $termsAndConditions;
     
     public function setLogoTemporaryName($logo_tmp) {
         $this->logo_tmp = $logo_tmp;
@@ -39,16 +42,49 @@ class TaxiServiceProvider
         return $this->serviceType;
     }
     
-    public function mapIncomingTaxiServiceProviderParams($logo_tmp, $target_path, $owner, $serviceType) {
+    public function setFleet($fleet) {
+        $this->fleet = $fleet;
+    }
+    
+    public function getFleet() {
+        return $this->fleet;
+    }
+    
+    public function setAppLink($appLink) {
+        $this->appLink = $appLink;
+    }
+    
+    public function getAppLink() {
+        return $this->appLink;
+    }
+    
+    public function setTermsAndConditions($termsAndConditions) {
+        $this->termsAndConditions = $termsAndConditions;
+    }
+    
+    public function getTermsAndConditions() {
+        return $this->termsAndConditions;
+    }
+    
+    public function mapIncomingTaxiServiceProviderParams($logo_tmp, $target_path, $owner, $serviceType, $fleet, $appLink, $termsAndConditions) {
         $this->setLogoTemporaryName($logo_tmp);
         $this->setTargetPathOfImage($target_path);
         $this->setOwner($owner);
         $this->setServiceType($serviceType);
+        $this->setFleet($fleet);
+        $this->setAppLink($appLink);
+        $this->setTermsAndConditions($termsAndConditions);
     }
     
     public function saveTaxiServiceProvider() {
-        $showTaxiServiceProviderDAO = new TaxiServiceProviderDAO();
-        $returnShowTaxiServiceProvider = $showTaxiServiceProviderDAO->showTaxiServiceDetails($this);
+        $saveTaxiServiceProviderDAO = new TaxiServiceProviderDAO();
+        $returnShowTaxiServiceProvider = $saveTaxiServiceProviderDAO->saveTaxiServiceDetails($this);
+        return $returnShowTaxiServiceProvider;
+    }
+    
+    public function loadTaxiServiceType() {
+        $showTaxiServiceProviderTypeDAO = new TaxiServiceProviderDAO();
+        $returnShowTaxiServiceProvider = $showTaxiServiceProviderTypeDAO->showTaxiServiceTypes($this);
         return $returnShowTaxiServiceProvider;
     }
 }
