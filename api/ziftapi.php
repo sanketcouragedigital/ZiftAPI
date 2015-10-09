@@ -11,6 +11,7 @@ require_once '../model/ServicesOfCheapestRideAsPerCity.php';
 require_once '../model/TaxiContact.php';
 require_once '../model/TaxiServiceProvider.php';
 require_once '../model/TaxiServicesInCity.php';
+require_once '../model/IndexPageCityLoad.php';
 
 
 function deliver_response($format, $api_response, $isSaveQuery) {
@@ -431,5 +432,12 @@ else if (isset($_GET['method'])) {
         $response['loadTaxiServicesList']=$fetchTaxiServices -> loadTaxiServiceType();
         deliver_response($_GET['format'], $response,false);
     }
+	if (strcasecmp($_GET['method'],'indexPageCity')==0) {
+		$response['code']=1;
+		$response['status']=$api_response_code[$response['code']]['HTTP Response'];
+		$fetchCity=new IndexPageCityLoad();
+		$response['loadCityList']=$fetchCity -> loadCity();
+		deliver_response($_GET['format'], $response,false);
+	}
 }
 ?>
